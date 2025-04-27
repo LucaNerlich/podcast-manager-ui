@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
+const API_URL = process.env.NEXT_PUBLIC_API || 'http://localhost:1337';
 
 export interface LoginResponse {
     jwt: string;
@@ -30,7 +30,7 @@ export interface Episode {
 }
 
 export const login = async (identifier: string, password: string): Promise<LoginResponse> => {
-    const response = await fetch(`${API_URL}/api/auth/local`, {
+    const response = await fetch(`${API_URL}/auth/local`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const login = async (identifier: string, password: string): Promise<Login
 };
 
 export const getPublicFeeds = async (): Promise<Feed[]> => {
-    const response = await fetch(`${API_URL}/api/feeds/public`);
+    const response = await fetch(`${API_URL}/feeds/public`);
 
     if (!response.ok) {
         throw new Error('Failed to fetch public feeds');
@@ -57,7 +57,7 @@ export const getPublicFeeds = async (): Promise<Feed[]> => {
 };
 
 export const getPrivateFeeds = async (token: string): Promise<Feed[]> => {
-    const response = await fetch(`${API_URL}/api/feeds/list`, {
+    const response = await fetch(`${API_URL}/feeds/list`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -72,8 +72,8 @@ export const getPrivateFeeds = async (token: string): Promise<Feed[]> => {
 
 export const getFeedBySlug = async (slug: string, token?: string): Promise<Feed> => {
     const url = token
-        ? `${API_URL}/api/feeds/slug/${slug}/token/${token}`
-        : `${API_URL}/api/feeds/slug/${slug}`;
+        ? `${API_URL}/feeds/slug/${slug}/token/${token}`
+        : `${API_URL}/feeds/slug/${slug}`;
 
     const response = await fetch(url);
 
@@ -86,6 +86,6 @@ export const getFeedBySlug = async (slug: string, token?: string): Promise<Feed>
 
 export const getEpisodeDownloadUrl = (episodeGuid: string, token?: string): string => {
     return token
-        ? `${API_URL}/api/episodes/${episodeGuid}/download?token=${token}`
-        : `${API_URL}/api/episodes/${episodeGuid}/download`;
+        ? `${API_URL}/episodes/${episodeGuid}/download?token=${token}`
+        : `${API_URL}/episodes/${episodeGuid}/download`;
 };
