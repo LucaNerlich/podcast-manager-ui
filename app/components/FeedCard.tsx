@@ -97,7 +97,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);
-    const formattedDate = releasedDate.toLocaleDateString('en-US', {
+    const formattedDate = releasedDate.toLocaleDateString('de-DE', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'

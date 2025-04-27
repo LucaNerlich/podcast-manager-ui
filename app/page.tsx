@@ -69,7 +69,7 @@ export default function HomePage() {
                         const feedWithEpisodes = await getFeedWithEpisodesBySlug(
                             privateFeedsData[i].slug,
                             privateFeedsData[i],
-                            jwt
+                            user?.token
                         );
                         detailedPrivateFeeds.push(feedWithEpisodes);
                     } catch (err) {
