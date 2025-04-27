@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {Feed, getPrivateFeeds, getPublicFeeds, getFeedWithEpisodesBySlug} from './utils/api';
+import {Feed, getFeedWithEpisodesBySlug, getPrivateFeeds, getPublicFeeds} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
 
@@ -113,7 +113,7 @@ export default function HomePage() {
                 {publicFeeds.length > 0 ? (
                     <div className="feed-grid">
                         {publicFeeds.map((feed) => (
-                            <FeedCard key={feed.slug} feed={feed}/>
+                            <FeedCard key={feed.slug} feed={feed} isPublic/>
                         ))}
                     </div>
                 ) : (

@@ -14,7 +14,6 @@ export interface Feed {
     documentId: string;
     title: string;
     description: string;
-    public: boolean;
     slug: string;
     url: string;
     cover?: string;
@@ -246,7 +245,6 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         description,
         title,
         cover: coverImage,
-        public: true,
         episodes
     };
 };
