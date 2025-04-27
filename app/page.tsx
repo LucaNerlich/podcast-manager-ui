@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {Feed, getPrivateFeeds, getPublicFeeds} from './utils/api';
+import {Feed, getFeedEpisodes, getPrivateFeeds, getPublicFeeds} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
 
@@ -29,12 +29,36 @@ export default function HomePage() {
       setError('');
 
       // Always fetch public feeds
-      const publicFeedsData = await getPublicFeeds();
+      let publicFeedsData = await getPublicFeeds();
+
+      // Fetch episodes for each public feed
+      for (let i = 0; i < publicFeedsData.length; i++) {
+        try {
+          const episodes = await getFeedEpisodes(publicFeedsData[i].documentId);
+          publicFeedsData[i].episodes = episodes;
+        } catch (err) {
+          console.error(`Error fetching episodes for feed ${publicFeedsData[i].title}:`, err);
+          publicFeedsData[i].episodes = [];
+        }
+      }
+
       setPublicFeeds(publicFeedsData);
 
       // Fetch private feeds if user is logged in
       if (jwt) {
-        const privateFeedsData = await getPrivateFeeds(jwt);
+        let privateFeedsData = await getPrivateFeeds(jwt);
+
+        // Fetch episodes for each private feed
+        for (let i = 0; i < privateFeedsData.length; i++) {
+          try {
+            const episodes = await getFeedEpisodes(privateFeedsData[i].documentId, jwt);
+            privateFeedsData[i].episodes = episodes;
+          } catch (err) {
+            console.error(`Error fetching episodes for feed ${privateFeedsData[i].title}:`, err);
+            privateFeedsData[i].episodes = [];
+          }
+        }
+
         setPrivateFeeds(privateFeedsData);
       }
     } catch (err) {

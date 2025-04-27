@@ -84,8 +84,39 @@ export const getFeedBySlug = async (slug: string, token?: string): Promise<Feed>
     return response.json();
 };
 
+export const getFeedUrl = (documentId: string): string => {
+    return `${API_URL}/feeds/${documentId}`;
+};
+
 export const getEpisodeDownloadUrl = (episodeGuid: string, token?: string): string => {
     return token
         ? `${API_URL}/episodes/${episodeGuid}/download?token=${token}`
         : `${API_URL}/episodes/${episodeGuid}/download`;
+};
+
+// New function to fetch episodes for a feed
+export const getFeedEpisodes = async (feedDocId: string, token?: string): Promise<Episode[]> => {
+    // Use standard Strapi endpoint to get the feed with its episodes
+    const url = `${API_URL}/feeds/${feedDocId}?populate=episodes`;
+
+    const headers: HeadersInit = {};
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(url, {headers});
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch episodes for feed: ${feedDocId}`);
+    }
+
+    const data = await response.json();
+    return data.data.attributes.episodes.data.map((episode: any) => ({
+        id: episode.id,
+        guid: episode.attributes.guid || episode.id.toString(),
+        title: episode.attributes.title,
+        description: episode.attributes.description,
+        duration: episode.attributes.duration,
+        releasedAt: episode.attributes.releasedAt
+    }));
 };
