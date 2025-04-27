@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {Feed, getFeedWithEpisodesBySlug, getPrivateFeeds, getPublicFeeds} from './utils/api';
+import {Feed, getFeedFromApi, getPrivateFeeds, getPublicFeeds} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
 
@@ -33,7 +33,7 @@ export default function HomePage() {
 
             // Create arrays for the Promise.all calls
             const publicFeedPromises = publicFeedsData.map(feed =>
-                getFeedWithEpisodesBySlug(feed.slug, feed)
+                getFeedFromApi(feed.slug)
                     .catch(err => {
                         // Handle errors for individual feeds
                         return {...feed, episodes: []};
@@ -50,7 +50,7 @@ export default function HomePage() {
 
                 // Create private feed promises array
                 const privateFeedPromises = privateFeedsData.map(feed =>
-                    getFeedWithEpisodesBySlug(feed.slug, feed, jwt)
+                    getFeedFromApi(feed.slug, jwt)
                         .catch(err => {
                             // Handle errors for individual feeds
                             return {...feed, episodes: []};

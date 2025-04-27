@@ -244,6 +244,21 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
     };
 };
 
+// New function to fetch feed data from our API route
+export const getFeedFromApi = async (slug: string, token?: string): Promise<Feed> => {
+    const url = token
+        ? `/api/feeds/${slug}?token=${token}`
+        : `/api/feeds/${slug}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch feed with slug: ${slug}`);
+    }
+
+    return response.json();
+};
+
 export const getEpisodeDownloadUrl = (episodeGuid: string, token?: string): string => {
     return token
         ? `${API_URL}/episodes/${episodeGuid}/download?token=${token}`
