@@ -54,6 +54,10 @@ a {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+.feed-info-full {
+    width: 100%;
+}
+
 .button-group {
     display: flex;
     gap: 0.5rem;
@@ -109,29 +113,28 @@ a {
 
 /* Episode Item Enhancements */
 .episode-item {
-    padding: 1rem;
-    margin-bottom: 1rem;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.6rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease;
     background-color: var(--bg-card);
 }
 
 .episode-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-light);
 }
 
 .episode-header {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .episode-avatar {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border-radius: 6px;
     overflow: hidden;
     flex-shrink: 0;
@@ -144,18 +147,26 @@ a {
     justify-content: center;
 }
 
+.episode-info-full {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
 .episode-title {
-    margin: 0 0 0.25rem 0;
-    font-size: 1rem;
+    margin: 0 0 0.2rem 0;
+    font-size: 0.95rem;
     font-weight: 600;
 }
 
 .episode-metadata {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .episode-duration {
@@ -165,8 +176,9 @@ a {
 }
 
 .episode-description {
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    font-size: 0.85rem;
 }
 
 .read-more-btn {
@@ -182,20 +194,29 @@ a {
     text-decoration: underline;
 }
 
-.episode-actions {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
+/* Adjust episode buttons to be more compact */
 .episode-btn {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
     flex: 1;
     justify-content: center;
+    min-height: 36px;
+}
+
+.episode-btn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* Adjust episode actions container */
+.episode-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
 }
 
 .btn-outline {
@@ -479,5 +500,48 @@ a {
 
     .episode-detail-description {
         padding: 0 1.5rem 1.5rem;
+    }
+}
+
+/* Horizontal episode action buttons */
+.episode-actions-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.episode-row-btn {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    flex: 1;
+    min-height: 32px;
+    white-space: nowrap;
+}
+
+.episode-row-btn svg {
+    min-width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.details-btn {
+    color: var(--primary-color);
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+}
+
+/* Make the horizontal layout full-width on small screens */
+@media (max-width: 480px) {
+    .episode-actions-row {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .episode-row-btn {
+        width: 100%;
     }
 }

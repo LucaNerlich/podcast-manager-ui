@@ -10,23 +10,18 @@ interface FeedCardProps {
     feed: Feed;
 }
 
-// Default placeholder images
-const DEFAULT_FEED_IMAGE = 'https://placehold.co/400x400/3498db/ffffff?text=FEED';
-const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=EP';
-
 // Number of episodes per page
 const EPISODES_PER_PAGE = 5;
 
 export default function FeedCard({feed}: FeedCardProps) {
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [imgError, setImgError] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [yearFilter, setYearFilter] = useState<string>('');
     const {user} = useAuth();
 
-    const feedImage = imgError || !feed.cover ? DEFAULT_FEED_IMAGE : feed.cover;
+    const hasValidCover = feed.cover;
 
     // Reset pagination when search/filter changes
     useEffect(() => {
@@ -88,17 +83,18 @@ export default function FeedCard({feed}: FeedCardProps) {
     return (
         <div className="card feed-card">
             <div className="feed-header">
-                <div className="feed-avatar">
-                    <Image
-                        src={feedImage}
-                        alt={feed.title}
-                        fill
-                        className="avatar-img"
-                        onError={() => setImgError(true)}
-                    />
-                </div>
+                {hasValidCover && (
+                    <div className="feed-avatar">
+                        <Image
+                            src={feed.cover!}
+                            alt={feed.title}
+                            fill
+                            className="avatar-img"
+                        />
+                    </div>
+                )}
 
-                <div>
+                <div className={!hasValidCover ? "feed-info-full" : "feed-info"}>
                     <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
                         {feed.public ? 'Public' : 'Private'}
                     </span>
@@ -225,9 +221,9 @@ interface EpisodeItemProps {
 function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const downloadUrl = getEpisodeDownloadUrl(episode.guid, userToken);
     const [copied, setCopied] = useState(false);
-    const [imgError, setImgError] = useState(false);
     const [expanded, setExpanded] = useState(false);
-    const episodeImage = imgError || !episode.cover ? DEFAULT_EPISODE_IMAGE : episode.cover;
+
+    const hasValidCover = episode.cover;
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);
@@ -271,17 +267,18 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     return (
         <div className="episode-item">
             <div className="episode-header">
-                <div className="episode-avatar">
-                    <Image
-                        src={episodeImage}
-                        alt={episode.title}
-                        fill
-                        className="avatar-img"
-                        onError={() => setImgError(true)}
-                    />
-                </div>
+                {hasValidCover && (
+                    <div className="episode-avatar">
+                        <Image
+                            src={episode.cover!}
+                            alt={episode.title}
+                            fill
+                            className="avatar-img"
+                        />
+                    </div>
+                )}
 
-                <div className="episode-info">
+                <div className={!hasValidCover ? "episode-info-full" : "episode-info"}>
                     <h5 className="episode-title">{episode.title}</h5>
                     <div className="episode-metadata">
                         <span className="episode-date">{formattedDate}</span>
@@ -308,20 +305,20 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                             className="read-more-btn"
                             onClick={() => setExpanded(!expanded)}
                         >
-                            {expanded ? 'Show less' : 'Read more'}
+                            {expanded ? 'Less' : 'More'}
                         </button>
                     )}
                 </div>
             )}
 
-            <div className="episode-actions">
+            <div className="episode-actions-row">
                 <Link
                     href={downloadUrl}
-                    className="btn btn-primary episode-btn"
+                    className="btn btn-primary episode-row-btn"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" strokeWidth="2">
                         <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"></path>
                     </svg>
@@ -330,11 +327,11 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
 
                 <button
                     onClick={copyDownloadUrl}
-                    className="btn btn-secondary episode-btn"
+                    className="btn btn-secondary episode-row-btn"
                 >
                     {copied ? (
                         <>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" strokeWidth="2">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
@@ -342,7 +339,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                         </>
                     ) : (
                         <>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" strokeWidth="2">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -354,9 +351,9 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
 
                 <Link
                     href={`/episode/${episode.guid}`}
-                    className="btn btn-outline episode-btn"
+                    className="btn btn-outline episode-row-btn details-btn"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" strokeWidth="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="16"></line>

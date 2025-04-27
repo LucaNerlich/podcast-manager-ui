@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useParams, useRouter} from 'next/navigation';
-import {Episode, Feed, getEpisodeDownloadUrl, getFeedFromApi, getPrivateFeeds, getPublicFeeds} from '../../utils/api';
+import {Episode, Feed, getEpisodeByGuid, getEpisodeDownloadUrl, getFeedFromApi} from '../../utils/api';
 import {useAuth} from '../../context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -30,56 +30,22 @@ export default function EpisodePage() {
             try {
                 setLoading(true);
 
-                // First, get all public feeds
-                const publicFeedsBasic = await getPublicFeeds();
+                // Fetch the episode directly by its GUID
+                const episodeData = await getEpisodeByGuid(guid, user?.token);
+                setEpisode(episodeData);
 
-                // Then, get detailed feed data for each public feed
-                const publicFeeds: Feed[] = await Promise.all(
-                    publicFeedsBasic.map((feed: Feed) =>
-                        getFeedFromApi(feed.slug)
-                    )
-                );
-
-                // Look for the episode in public feeds
-                let foundFeed: Feed | null = null;
-                let foundEpisode: Episode | null = null;
-
-                for (const feed of publicFeeds) {
-                    const episode = feed.episodes.find((ep: Episode) => ep.guid === guid);
-                    if (episode) {
-                        foundFeed = feed;
-                        foundEpisode = episode;
-                        break;
+                // If the episode has a feedSlug property, fetch the feed data
+                if (episodeData.feedSlug) {
+                    try {
+                        const feedData = await getFeedFromApi(episodeData.feedSlug, user?.token);
+                        setFeed(feedData);
+                    } catch (feedErr) {
+                        console.error('Error fetching feed:', feedErr);
+                        // We continue even if feed fetch fails
                     }
-                }
-
-                // If not found in public feeds and user is logged in, check private feeds
-                if (!foundEpisode && jwt) {
-                    const privateFeedsBasic = await getPrivateFeeds(jwt);
-
-                    const privateFeeds: Feed[] = await Promise.all(
-                        privateFeedsBasic.map((feed: Feed) =>
-                            getFeedFromApi(feed.slug, jwt)
-                        )
-                    );
-
-                    for (const feed of privateFeeds) {
-                        const episode = feed.episodes.find((ep: Episode) => ep.guid === guid);
-                        if (episode) {
-                            foundFeed = feed;
-                            foundEpisode = episode;
-                            break;
-                        }
-                    }
-                }
-
-                if (foundEpisode && foundFeed) {
-                    setEpisode(foundEpisode);
-                    setFeed(foundFeed);
-                } else {
-                    setError('Episode not found');
                 }
             } catch (err) {
+                console.error('Error fetching episode:', err);
                 setError('Failed to load episode details');
             } finally {
                 setLoading(false);
@@ -87,7 +53,7 @@ export default function EpisodePage() {
         };
 
         fetchEpisodeDetails();
-    }, [guid, jwt, authLoading]);
+    }, [guid, user?.token, authLoading]);
 
     const downloadUrl = episode ? getEpisodeDownloadUrl(episode.guid, user?.token) : '';
 
@@ -131,7 +97,7 @@ export default function EpisodePage() {
         );
     }
 
-    if (error || !episode || !feed) {
+    if (error || !episode) {
         return (
             <div className="container">
                 <div className="error-message">{error || 'Episode not found'}</div>
@@ -151,17 +117,19 @@ export default function EpisodePage() {
                              stroke="currentColor" strokeWidth="2">
                             <path d="M19 12H5M12 19l-7-7 7-7"></path>
                         </svg>
-                        Back to Feed
+                        Back
                     </button>
 
-                    <div className="feed-info">
-                        <Link href={`/?feed=${feed.slug}`} className="feed-link">
-                            {feed.title}
-                        </Link>
-                        <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
-                            {feed.public ? 'Public' : 'Private'}
-                        </span>
-                    </div>
+                    {feed && (
+                        <div className="feed-info">
+                            <Link href={`/?feed=${feed.slug}`} className="feed-link">
+                                {feed.title}
+                            </Link>
+                            <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
+                                {feed.public ? 'Public' : 'Private'}
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 <div className="episode-detail-card">
@@ -204,16 +172,19 @@ export default function EpisodePage() {
                                     </div>
                                 )}
 
-                                <div className="metadata-item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                        <line x1="12" y1="19" x2="12" y2="23"></line>
-                                        <line x1="8" y1="23" x2="16" y2="23"></line>
-                                    </svg>
-                                    <span>Episode #{feed.episodes.findIndex(ep => ep.guid === episode.guid) + 1}</span>
-                                </div>
+                                {feed && (
+                                    <div className="metadata-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                                        </svg>
+                                        <span>From: {feed.title}</span>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="episode-actions-detail">
@@ -267,7 +238,7 @@ export default function EpisodePage() {
                     </div>
                 </div>
 
-                {feed.episodes.length > 1 && (
+                {feed && feed.episodes && feed.episodes.length > 1 && (
                     <div className="more-episodes">
                         <h2>More Episodes</h2>
                         <div className="more-episodes-list">

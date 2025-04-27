@@ -28,6 +28,7 @@ export interface Episode {
     duration: number;
     releasedAt: string;
     cover?: string;
+    feedSlug?: string;
 }
 
 export const login = async (identifier: string, password: string): Promise<LoginResponse> => {
@@ -95,4 +96,21 @@ export const getEpisodeDownloadUrl = (episodeGuid: string, token?: string): stri
     return token
         ? `${API_URL}/episodes/${episodeGuid}/download?token=${token}`
         : `${API_URL}/episodes/${episodeGuid}/download`;
+};
+
+/**
+ * Fetch episode data directly by GUID
+ */
+export const getEpisodeByGuid = async (guid: string, token?: string): Promise<Episode> => {
+    const url = token
+        ? `${API_URL}/episodes/${guid}?token=${token}`
+        : `${API_URL}/episodes/${guid}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch episode with GUID: ${guid}`);
+    }
+
+    return response.json();
 };
