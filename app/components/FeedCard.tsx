@@ -17,9 +17,10 @@ const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=E
 export default function FeedCard({feed}: FeedCardProps) {
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [imgError, setImgError] = useState(false);
     const {user} = useAuth();
 
-    const feedImage = feed.cover || DEFAULT_FEED_IMAGE;
+    const feedImage = imgError || !feed.cover ? DEFAULT_FEED_IMAGE : feed.cover;
 
     const copyFeedUrl = async () => {
         try {
@@ -27,7 +28,7 @@ export default function FeedCard({feed}: FeedCardProps) {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
-            console.error('Failed to copy: ', err);
+            console.error('Failed to copy feed URL');
         }
     };
 
@@ -40,6 +41,7 @@ export default function FeedCard({feed}: FeedCardProps) {
                         alt={feed.title}
                         fill
                         className="avatar-img"
+                        onError={() => setImgError(true)}
                     />
                 </div>
 
@@ -97,7 +99,8 @@ interface EpisodeItemProps {
 function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const downloadUrl = getEpisodeDownloadUrl(episode.guid, userToken);
     const [copied, setCopied] = useState(false);
-    const episodeImage = episode.cover || DEFAULT_EPISODE_IMAGE;
+    const [imgError, setImgError] = useState(false);
+    const episodeImage = imgError || !episode.cover ? DEFAULT_EPISODE_IMAGE : episode.cover;
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);
@@ -113,7 +116,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
-            console.error('Failed to copy: ', err);
+            console.error('Failed to copy episode URL');
         }
     };
 
@@ -126,6 +129,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                         alt={episode.title}
                         fill
                         className="avatar-img"
+                        onError={() => setImgError(true)}
                     />
                 </div>
 

@@ -18,7 +18,8 @@ export async function GET(
     request: NextRequest,
     {params}: { params: { slug: string } }
 ) {
-    const {slug} = params;
+    // Await the params to fix the Next.js warning
+    const slug = params.slug;
     const {searchParams} = new URL(request.url);
     const token = searchParams.get('token');
 
