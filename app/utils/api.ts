@@ -244,6 +244,7 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         description,
         title,
         cover: coverImage,
+        public: true,
         episodes
     };
 };
