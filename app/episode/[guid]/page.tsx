@@ -7,9 +7,6 @@ import {useAuth} from '../../context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Default placeholder images
-const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=EP';
-
 export default function EpisodePage() {
     const params = useParams();
     const guid = params.guid as string;
@@ -20,7 +17,6 @@ export default function EpisodePage() {
     const [feed, setFeed] = useState<Feed | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [imgError, setImgError] = useState(false);
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
@@ -87,7 +83,8 @@ export default function EpisodePage() {
         }
     };
 
-    const episodeImage = imgError || !episode?.cover ? DEFAULT_EPISODE_IMAGE : episode.cover;
+    console.log("episode", episode);
+    const episodeImage = episode?.cover?.url;
 
     if (loading || authLoading) {
         return (
@@ -134,16 +131,15 @@ export default function EpisodePage() {
 
                 <div className="episode-detail-card">
                     <div className="episode-detail-content">
-                        <div className="episode-image-container">
-                            <Image
-                                src={episodeImage}
-                                alt={episode.title}
-                                width={300}
-                                height={300}
-                                className="episode-detail-image"
-                                onError={() => setImgError(true)}
-                            />
-                        </div>
+                        {episodeImage && <div className="episode-image-container">
+                          <Image
+                            src={episodeImage}
+                            alt={episode.title}
+                            width={300}
+                            height={300}
+                            className="episode-detail-image"
+                          />
+                        </div>}
 
                         <div className="episode-detail-info">
                             <h1 className="episode-detail-title">{episode.title}</h1>

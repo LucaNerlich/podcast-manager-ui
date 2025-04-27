@@ -27,7 +27,9 @@ export interface Episode {
     description: string;
     duration: number;
     releasedAt: string;
-    cover?: string;
+    cover?: {
+        url: string;
+    };
     feedSlug?: string;
 }
 
