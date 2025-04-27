@@ -20,6 +20,12 @@ export default async function FeedPage({params}: { params: { slug: string } }) {
             );
         }
 
+        console.log("feed", feed);
+
+        const feedUrl = feed.public
+            ? `https://podcasthub.org/api/feeds/slug/${slug}`
+            : `https://podcasthub.org/api/feeds/slug/${slug}/token/${auth.user?.token}`
+
         return (
             <div className="container">
                 <div className="feed-detail-page">
@@ -58,10 +64,10 @@ export default async function FeedPage({params}: { params: { slug: string } }) {
                                             <path
                                                 d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                                         </svg>
-                                        <a href={feed.url} target="_blank" rel="noopener noreferrer"
-                                           className="feed-url">
+                                        <Link href={feedUrl} target="_blank" rel="noopener noreferrer"
+                                              className="feed-url">
                                             RSS Feed
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

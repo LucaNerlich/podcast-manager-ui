@@ -58,6 +58,7 @@ export async function GET(
         // Extract feed data
         const title = channel.title;
         const description = channel.description;
+        const isPublic = channel.public;
 
         // Extract feed image
         let cover = "";
@@ -117,6 +118,7 @@ export async function GET(
         return NextResponse.json({
             title,
             description,
+            public: isPublic,
             cover,
             slug,
             episodes
