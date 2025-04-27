@@ -17,7 +17,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Load auth state from localStorage on mount
+        // Load auth state from storage on mount
         const savedAuth = getAuth();
         setAuthState(savedAuth);
         setLoading(false);
@@ -32,7 +32,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             };
 
             setAuthState(newAuthState);
-            saveAuth(newAuthState);
+            saveAuth(newAuthState); // This now saves to both localStorage and cookie
         } catch (error) {
             console.error('Login failed:', error);
             throw error;
@@ -41,7 +41,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
 
     const logout = () => {
         setAuthState({user: null, jwt: null});
-        clearAuth();
+        clearAuth(); // This now clears both localStorage and cookie
     };
 
     return (

@@ -224,8 +224,6 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const [copied, setCopied] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
-    const hasValidCover = episode.cover;
-
     // Format date
     const releasedDate = new Date(episode.releasedAt);
     const formattedDate = releasedDate.toLocaleDateString('de-DE', {
@@ -268,10 +266,10 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     return (
         <div className="episode-item">
             <div className="episode-header">
-                {hasValidCover && (
+                {episode?.cover?.url && (
                     <div className="episode-avatar">
                         <Image
-                            src={episode.cover!}
+                            src={episode?.cover?.url}
                             alt={episode.title}
                             fill
                             className="avatar-img"
@@ -279,7 +277,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                     </div>
                 )}
 
-                <div className={!hasValidCover ? "episode-info-full" : "episode-info"}>
+                <div className={episode?.cover?.url ? "episode-info-full" : "episode-info"}>
                     <h5 className="episode-title">{episode.title}</h5>
                     <div className="episode-metadata">
                         <span className="episode-date">{formattedDate}</span>
