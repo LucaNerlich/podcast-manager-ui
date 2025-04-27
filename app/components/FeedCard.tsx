@@ -1,8 +1,10 @@
 'use client';
 
 import React, {useState} from 'react';
-import {Episode, Feed, getEpisodeDownloadUrl, getFeedUrl} from '../utils/api';
+import {Episode, Feed, getEpisodeDownloadUrl} from '../utils/api';
 import {useAuth} from '../context/AuthContext';
+import Image from "next/image";
+import Link from "next/link";
 
 interface FeedCardProps {
     feed: Feed;
@@ -13,16 +15,16 @@ const DEFAULT_FEED_IMAGE = 'https://placehold.co/400x400/3498db/ffffff?text=FEED
 const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=EP';
 
 export default function FeedCard({feed}: FeedCardProps) {
+    console.log("feed", feed);
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
     const {user} = useAuth();
 
-    const feedUrl = getFeedUrl(feed.documentId);
-    const feedImage = feed.imageUrl || DEFAULT_FEED_IMAGE;
+    const feedImage = feed.cover || DEFAULT_FEED_IMAGE;
 
     const copyFeedUrl = async () => {
         try {
-            await navigator.clipboard.writeText(feedUrl);
+            await navigator.clipboard.writeText(feed.url);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
@@ -33,11 +35,12 @@ export default function FeedCard({feed}: FeedCardProps) {
     return (
         <div className="card feed-card">
             <div className="feed-header">
-                {/* Circular Feed Avatar */}
                 <div className="feed-avatar">
-                    <img
+                    <Image
                         src={feedImage}
                         alt={feed.title}
+                        objectFit="cover"
+                        fill
                         className="avatar-img"
                     />
                 </div>
@@ -96,7 +99,7 @@ interface EpisodeItemProps {
 function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const downloadUrl = getEpisodeDownloadUrl(episode.guid, userToken);
     const [copied, setCopied] = useState(false);
-    const episodeImage = episode.imageUrl || DEFAULT_EPISODE_IMAGE;
+    const episodeImage = episode.cover || DEFAULT_EPISODE_IMAGE;
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);
@@ -119,11 +122,12 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     return (
         <div className="episode-item">
             <div className="episode-header">
-                {/* Circular Episode Avatar */}
                 <div className="episode-avatar">
-                    <img
+                    <Image
                         src={episodeImage}
                         alt={episode.title}
+                        objectFit="cover"
+                        fill
                         className="avatar-img"
                     />
                 </div>
@@ -141,7 +145,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
             </p>
 
             <div className="button-container">
-                <a
+                <Link
                     href={downloadUrl}
                     className="btn btn-primary"
                     target="_blank"
@@ -149,7 +153,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                     style={{flex: '1'}}
                 >
                     Download Episode
-                </a>
+                </Link>
                 <button
                     onClick={copyDownloadUrl}
                     className="btn btn-secondary"

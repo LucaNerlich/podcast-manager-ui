@@ -11,24 +11,24 @@ export interface LoginResponse {
 }
 
 export interface Feed {
-    id: number;
     documentId: string;
     title: string;
     description: string;
     public: boolean;
     slug: string;
-    imageUrl?: string;
+    url: string;
+    cover?: string;
     episodes: Episode[];
 }
 
 export interface Episode {
-    id: number;
+    documentId: number;
     guid: string;
     title: string;
     description: string;
     duration: number;
     releasedAt: string;
-    imageUrl?: string;
+    cover?: string;
 }
 
 export const login = async (identifier: string, password: string): Promise<LoginResponse> => {
@@ -84,10 +84,6 @@ export const getFeedBySlug = async (slug: string, token?: string): Promise<Feed>
     }
 
     return response.json();
-};
-
-export const getFeedUrl = (documentId: string): string => {
-    return `${API_URL}/feeds/${documentId}`;
 };
 
 export const getEpisodeDownloadUrl = (episodeGuid: string, token?: string): string => {
