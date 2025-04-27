@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import "./globals.css";
+import Footer from "@/app/components/Footer";
 
 export const metadata: Metadata = {
     title: 'Podcast Hub UI',
@@ -70,7 +71,7 @@ export default function RootLayout({
         <main>
             {children}
         </main>
-        <footer></footer>
+        <Footer/>
         </body>
         </html>
     );
