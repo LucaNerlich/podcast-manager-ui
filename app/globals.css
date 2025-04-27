@@ -281,31 +281,6 @@ a {
     }
 }
 
-/* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-    .episode-item {
-        background-color: var(--bg-card-dark, #2a2a2a);
-    }
-
-    .episode-controls {
-        background-color: var(--bg-dark, #222);
-    }
-
-    .search-input, .year-filter {
-        background-color: var(--bg-input-dark, #333);
-        color: var(--text-primary-dark, #eee);
-        border-color: var(--border-color-dark, #444);
-    }
-
-    .btn-outline {
-        border-color: var(--primary-color);
-    }
-
-    .btn-outline:hover {
-        background: rgba(var(--primary-rgb), 0.2);
-    }
-}
-
 /* Episode Detail Page */
 .episode-detail-page {
     max-width: 900px;
