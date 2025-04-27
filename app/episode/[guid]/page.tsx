@@ -146,15 +146,15 @@ export default async function EpisodePage({params}: { params: { guid: string } }
                                 {feed.episodes
                                     .filter(ep => ep.guid !== episode.guid)
                                     .slice(0, 5)
-                                    .map(ep => (
+                                    .map(episode => (
                                         <Link
-                                            href={`/episode/${ep.guid}`}
-                                            key={ep.guid}
+                                            href={`/episode/${episode.guid}`}
+                                            key={episode.guid}
                                             className="more-episode-item"
                                         >
-                                            <div className="more-episode-title">{ep.title}</div>
+                                            <div className="more-episode-title">{episode.title}</div>
                                             <div className="more-episode-date">
-                                                {new Date(ep.releasedAt).toLocaleDateString('de-DE', {
+                                                {new Date(episode.releasedAt).toLocaleDateString('de-DE', {
                                                     year: 'numeric',
                                                     month: 'long',
                                                     day: 'numeric'

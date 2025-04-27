@@ -19,34 +19,17 @@ export async function GET(
     {params}: { params: { slug: string } }
 ) {
     // Await the params to fix the Next.js warning
-    const slug = params.slug;
+    const {slug} = await params;
     const {searchParams} = new URL(request.url);
     const token = searchParams.get('token');
 
     try {
-        // Get the base feed info
-        const baseFeedResponse = await fetch(`${API_URL}/feeds/public`);
-        if (!baseFeedResponse.ok) {
-            return NextResponse.json(
-                {error: 'Failed to fetch base feed data'},
-                {status: baseFeedResponse.status}
-            );
-        }
-
-        const baseFeeds = await baseFeedResponse.json();
-        const baseFeed = baseFeeds.find((feed: any) => feed.slug === slug);
-
-        if (!baseFeed) {
-            return NextResponse.json(
-                {error: 'Feed not found'},
-                {status: 404}
-            );
-        }
-
         // Fetch the XML feed
         const url = token
             ? `${API_URL}/feeds/slug/${slug}/token/${token}`
             : `${API_URL}/feeds/slug/${slug}`;
+
+        console.log("url", url);
 
         const response = await fetch(url);
 
@@ -76,11 +59,11 @@ export async function GET(
         }
 
         // Extract feed data
-        const title = channel.title || baseFeed.title;
-        const description = channel.description || baseFeed.description;
+        const title = channel.title;
+        const description = channel.description;
 
         // Extract feed image
-        let coverImage = baseFeed.cover || "";
+        let coverImage = "";
         if (channel.image?.url) {
             coverImage = channel.image.url;
         } else if (channel["itunes:image"]?._href) {
@@ -135,13 +118,11 @@ export async function GET(
 
         // Return the processed feed data
         return NextResponse.json({
-            ...baseFeed,
             title,
             description,
             cover: coverImage,
             episodes
         });
-
     } catch (error) {
         console.error('Error processing feed:', error);
         return NextResponse.json(

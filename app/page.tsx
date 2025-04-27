@@ -50,7 +50,7 @@ export default function HomePage() {
 
                 // Create private feed promises array
                 const privateFeedPromises = privateFeedsData.map(feed =>
-                    getFeedFromApi(feed.slug, jwt)
+                    getFeedFromApi(feed.slug, user?.token)
                         .catch(err => {
                             // Handle errors for individual feeds
                             return {...feed, episodes: []};
