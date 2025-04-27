@@ -6,6 +6,17 @@ import {Feed, getFeedEpisodes, getPrivateFeeds, getPublicFeeds} from './utils/ap
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
 
+// Extended interface to handle potential raw Strapi response format
+interface StrapiResponseFeed extends Feed {
+  image?: {
+    data?: {
+      attributes?: {
+        url?: string;
+      }
+    }
+  }
+}
+
 export default function HomePage() {
   const [publicFeeds, setPublicFeeds] = useState<Feed[]>([]);
   const [privateFeeds, setPrivateFeeds] = useState<Feed[]>([]);
@@ -31,6 +42,22 @@ export default function HomePage() {
       // Always fetch public feeds
       let publicFeedsData = await getPublicFeeds();
 
+      // Process feed data to extract image URLs
+      publicFeedsData = publicFeedsData.map(feed => {
+        // Cast to extended type to access potential Strapi response fields
+        const strapiFeed = feed as StrapiResponseFeed;
+        // Extract image URL from Strapi response if available
+        const imageUrl = strapiFeed.image?.data?.attributes?.url ||
+            feed.imageUrl ||
+            null;
+
+        return {
+          ...feed,
+          imageUrl,
+          episodes: feed.episodes || []
+        };
+      });
+
       // Fetch episodes for each public feed
       for (let i = 0; i < publicFeedsData.length; i++) {
         try {
@@ -47,6 +74,22 @@ export default function HomePage() {
       // Fetch private feeds if user is logged in
       if (jwt) {
         let privateFeedsData = await getPrivateFeeds(jwt);
+
+        // Process feed data to extract image URLs
+        privateFeedsData = privateFeedsData.map(feed => {
+          // Cast to extended type to access potential Strapi response fields
+          const strapiFeed = feed as StrapiResponseFeed;
+          // Extract image URL from Strapi response if available
+          const imageUrl = strapiFeed.image?.data?.attributes?.url ||
+              feed.imageUrl ||
+              null;
+
+          return {
+            ...feed,
+            imageUrl,
+            episodes: feed.episodes || []
+          };
+        });
 
         // Fetch episodes for each private feed
         for (let i = 0; i < privateFeedsData.length; i++) {

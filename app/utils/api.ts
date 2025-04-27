@@ -17,6 +17,7 @@ export interface Feed {
     description: string;
     public: boolean;
     slug: string;
+    imageUrl?: string;
     episodes: Episode[];
 }
 
@@ -27,6 +28,7 @@ export interface Episode {
     description: string;
     duration: number;
     releasedAt: string;
+    imageUrl?: string;
 }
 
 export const login = async (identifier: string, password: string): Promise<LoginResponse> => {
@@ -117,6 +119,7 @@ export const getFeedEpisodes = async (feedDocId: string, token?: string): Promis
         title: episode.attributes.title,
         description: episode.attributes.description,
         duration: episode.attributes.duration,
-        releasedAt: episode.attributes.releasedAt
+        releasedAt: episode.attributes.releasedAt,
+        imageUrl: episode.attributes.image?.data?.url
     }));
 };

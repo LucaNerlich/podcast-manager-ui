@@ -8,12 +8,17 @@ interface FeedCardProps {
     feed: Feed;
 }
 
+// Default placeholder images
+const DEFAULT_FEED_IMAGE = 'https://placehold.co/400x400/3498db/ffffff?text=FEED';
+const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=EP';
+
 export default function FeedCard({feed}: FeedCardProps) {
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
     const {user} = useAuth();
 
     const feedUrl = getFeedUrl(feed.documentId);
+    const feedImage = feed.imageUrl || DEFAULT_FEED_IMAGE;
 
     const copyFeedUrl = async () => {
         try {
@@ -27,31 +32,36 @@ export default function FeedCard({feed}: FeedCardProps) {
 
     return (
         <div className="card feed-card">
-            <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
-                {feed.public ? 'Public' : 'Private'}
-            </span>
+            <div className="feed-header">
+                {/* Circular Feed Avatar */}
+                <div className="feed-avatar">
+                    <img
+                        src={feedImage}
+                        alt={feed.title}
+                        className="avatar-img"
+                    />
+                </div>
 
-            <h3 className="feed-title">{feed.title}</h3>
+                <div>
+                    <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
+                        {feed.public ? 'Public' : 'Private'}
+                    </span>
+                    <h3 className="feed-title">{feed.title}</h3>
+                </div>
+            </div>
+
             <p className="feed-description">{feed.description}</p>
 
             <button
                 onClick={copyFeedUrl}
-                className="btn btn-primary"
-                style={{
-                    marginBottom: '15px',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
+                className="btn btn-primary full-width-button"
             >
                 {copied ? '✓ Feed URL Copied!' : 'Copy Feed URL'}
             </button>
 
             <button
-                className="btn btn-primary"
+                className="btn btn-primary full-width-button"
                 onClick={() => setShowEpisodes(!showEpisodes)}
-                style={{marginBottom: '15px'}}
             >
                 {showEpisodes ? 'Hide Episodes' : 'Show Episodes'}
             </button>
@@ -86,6 +96,7 @@ interface EpisodeItemProps {
 function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const downloadUrl = getEpisodeDownloadUrl(episode.guid, userToken);
     const [copied, setCopied] = useState(false);
+    const episodeImage = episode.imageUrl || DEFAULT_EPISODE_IMAGE;
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);
@@ -107,8 +118,21 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
 
     return (
         <div className="episode-item">
-            <h5 className="episode-title">{episode.title}</h5>
-            <div className="episode-date">{formattedDate}</div>
+            <div className="episode-header">
+                {/* Circular Episode Avatar */}
+                <div className="episode-avatar">
+                    <img
+                        src={episodeImage}
+                        alt={episode.title}
+                        className="avatar-img"
+                    />
+                </div>
+
+                <div>
+                    <h5 className="episode-title">{episode.title}</h5>
+                    <div className="episode-date">{formattedDate}</div>
+                </div>
+            </div>
 
             <p className="episode-description">
                 {episode.description?.length > 150
@@ -116,7 +140,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                     : episode.description}
             </p>
 
-            <div style={{display: 'flex', gap: '10px', marginBottom: '10px'}}>
+            <div className="button-container">
                 <a
                     href={downloadUrl}
                     className="btn btn-primary"
