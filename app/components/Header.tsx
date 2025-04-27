@@ -18,7 +18,7 @@ export default function Header() {
         <div className="header container">
             <div className="logo">
                 <Link href="/">
-                    <h1>Podcast Manager</h1>
+                    <h1>Podcast Manager UI</h1>
                 </Link>
             </div>
 
