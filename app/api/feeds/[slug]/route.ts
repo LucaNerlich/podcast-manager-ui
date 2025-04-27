@@ -58,7 +58,7 @@ export async function GET(
         // Extract feed data
         const title = channel.title;
         const description = channel.description;
-        const isPublic = channel.public;
+        const isPublic = channel.public === 'true' || channel.public === true;
 
         // Extract feed image
         let cover = "";
