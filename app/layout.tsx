@@ -1,10 +1,14 @@
-import type {Metadata} from "next";
-import "./globals.css";
-import Footer from "@/app/components/Footer";
+import React from 'react';
+import type {Metadata} from 'next';
+import './globals.css';
+import './styles.css';
+import Footer from '@/app/components/Footer';
+import Header from '@/app/components/Header';
+import {AuthProvider} from './context/AuthContext';
 
 export const metadata: Metadata = {
-    title: 'Podcast Hub UI',
-    description: 'Podcast Hub UI bietet einfache Podcast RSS XML Feed Verwaltung. Public and Private',
+    title: 'Podcast Manager',
+    description: 'A simple UI client for managing podcasts',
     keywords: 'Podcast, Feed, XML, Private Feed, RSS',
     authors: [{name: 'Podcast Hub UI'}, {name: 'Susanne Görlitz'}],
     creator: 'Podcast Hub UI',
@@ -61,17 +65,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
                                        children,
-                                   }: Readonly<{
+                                   }: {
     children: React.ReactNode;
-}>) {
+}) {
     return (
-        <html lang="de">
+        <html lang="en">
         <body>
-        <header></header>
-        <main>
-            {children}
-        </main>
-        <Footer/>
+        <AuthProvider>
+            <Header/>
+            <main>
+                {children}
+            </main>
+            <Footer/>
+        </AuthProvider>
         </body>
         </html>
     );

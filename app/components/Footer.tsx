@@ -1,11 +1,16 @@
 import React from 'react';
-import Link from "next/link";
-import styles from './Footer.module.css';
 
-export default function Footer(): React.ReactElement {
+export default function Footer() {
     return (
-        <footer className={styles.footer}>
-            <p>built by <Link href="https://pnn-it.de">pnn-it.de</Link></p>
+        <footer className="container" style={{
+            marginTop: '2rem',
+            borderTop: '1px solid var(--light-gray)',
+            padding: '1rem 0',
+            textAlign: 'center',
+            color: 'var(--dark-gray)',
+            fontSize: '0.9rem'
+        }}>
+            <p>© {new Date().getFullYear()} Podcast Manager. All rights reserved.</p>
         </footer>
-    )
+    );
 }
