@@ -22,7 +22,6 @@ export interface Feed {
 }
 
 export interface Episode {
-    documentId: number;
     guid: string;
     title: string;
     description: string;
@@ -128,11 +127,69 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         const title = item.querySelector("title")?.textContent || `Episode ${index + 1}`;
         const description = item.querySelector("description")?.textContent || "";
         const pubDate = item.querySelector("pubDate")?.textContent || "";
-        const duration = item.querySelector("itunes\\:duration")?.textContent || "0";
-        const image = item.querySelector("itunes\\:image")?.getAttribute("href") || "";
+
+        // Handle namespaced elements - multiple approaches to find the right one
+        // First try with namespace prefix
+        let duration = "";
+        let image = "";
+
+        // Try different selector patterns for itunes elements due to browser inconsistencies
+        const durationSelectors = [
+            "itunes\\:duration",
+            "*|duration",
+            "duration"
+        ];
+
+        for (const selector of durationSelectors) {
+            const durationElement = item.querySelector(selector);
+            if (durationElement && durationElement.textContent) {
+                duration = durationElement.textContent;
+                break;
+            }
+        }
+
+        // Try different approaches for the image
+        const imageSelectors = [
+            "itunes\\:image",
+            "*|image",
+            "image"
+        ];
+
+        for (const selector of imageSelectors) {
+            const imageElement = item.querySelector(selector);
+            if (imageElement && imageElement.getAttribute("href")) {
+                image = imageElement.getAttribute("href") || "";
+                break;
+            }
+        }
+
+        // If still no image, try a more direct approach with the raw XML
+        if (!image) {
+            // Get the raw XML string for the item
+            const serializer = new XMLSerializer();
+            const itemXml = serializer.serializeToString(item);
+
+            // Use regex to extract the href attribute from itunes:image tag
+            const imageMatch = itemXml.match(/<itunes:image[^>]*href="([^"]*)"[^>]*>/i);
+            if (imageMatch && imageMatch[1]) {
+                image = imageMatch[1];
+            }
+        }
+
+        // If still no image, try a more generic approach to find any element with href attribute
+        if (!image) {
+            // Look for any element with href that might contain image or itunes
+            const elements = item.querySelectorAll("*");
+            for (const el of elements) {
+                const nodeName = el.nodeName.toLowerCase();
+                if ((nodeName.includes('image') || nodeName.includes('itunes:image')) && el.getAttribute("href")) {
+                    image = el.getAttribute("href") || "";
+                    break;
+                }
+            }
+        }
 
         return {
-            documentId: index,
             guid,
             title,
             description,

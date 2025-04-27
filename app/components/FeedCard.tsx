@@ -11,7 +11,6 @@ interface FeedCardProps {
 }
 
 export default function FeedCard({feed}: FeedCardProps) {
-    console.log("feed", feed);
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
     const {user} = useAuth();

@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {Feed, getFeedEpisodes, getPrivateFeeds, getPublicFeeds, getFeedWithEpisodesBySlug} from './utils/api';
+import {Feed, getPrivateFeeds, getPublicFeeds, getFeedWithEpisodesBySlug} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
 
@@ -30,17 +30,16 @@ export default function HomePage() {
 
             // Always fetch public feeds
             const publicFeedsData = await getPublicFeeds();
-            console.log("publicFeedsData", publicFeedsData);
-            
+
             // Create a copy to avoid mutating the original
             const detailedPublicFeeds: Feed[] = [];
-            
+
             // Fetch complete feed with episodes for each public feed
             for (let i = 0; i < publicFeedsData.length; i++) {
                 try {
                     // Fetch and parse the XML feed
                     const feedWithEpisodes = await getFeedWithEpisodesBySlug(
-                        publicFeedsData[i].slug, 
+                        publicFeedsData[i].slug,
                         publicFeedsData[i]
                     );
                     detailedPublicFeeds.push(feedWithEpisodes);
@@ -53,24 +52,22 @@ export default function HomePage() {
                     });
                 }
             }
-            
-            console.log("detailedPublicFeeds", detailedPublicFeeds);
+
             setPublicFeeds(detailedPublicFeeds);
 
             // Fetch private feeds if user is logged in
             if (jwt) {
                 const privateFeedsData = await getPrivateFeeds(jwt);
-                console.log("privateFeedsData", privateFeedsData);
-                
+
                 // Create a copy to avoid mutating the original
                 const detailedPrivateFeeds: Feed[] = [];
-                
+
                 // Fetch complete feed with episodes for each private feed
                 for (let i = 0; i < privateFeedsData.length; i++) {
                     try {
                         // Fetch and parse the XML feed
                         const feedWithEpisodes = await getFeedWithEpisodesBySlug(
-                            privateFeedsData[i].slug, 
+                            privateFeedsData[i].slug,
                             privateFeedsData[i],
                             jwt
                         );
@@ -84,8 +81,7 @@ export default function HomePage() {
                         });
                     }
                 }
-                
-                console.log("detailedPrivateFeeds", detailedPrivateFeeds);
+
                 setPrivateFeeds(detailedPrivateFeeds);
             }
         } catch (err) {
