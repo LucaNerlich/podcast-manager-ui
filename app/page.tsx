@@ -114,8 +114,8 @@ export default function HomePage() {
 
             {!jwt && (
                 <section style={{marginTop: '2rem'}}>
-                    <div className="card">
-                        <h3>Access Private Feeds</h3>
+                    <div>
+                        <h2>Access Private Feeds</h2>
                         <p>Please log in to access your private feeds.</p>
                         <button
                             className="btn btn-primary"

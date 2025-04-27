@@ -17,14 +17,6 @@
     padding: 20px;
 }
 
-.card {
-    background-color: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
 .btn {
     display: inline-block;
     font-weight: 400;
