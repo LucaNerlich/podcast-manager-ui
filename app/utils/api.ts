@@ -14,6 +14,7 @@ export interface Feed {
     documentId: string;
     title: string;
     description: string;
+    public: boolean;
     slug: string;
     url: string;
     cover?: string;
@@ -90,8 +91,6 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         ? `${API_URL}/feeds/slug/${slug}/token/${token}`
         : `${API_URL}/feeds/slug/${slug}`;
 
-    console.log("url", url);
-
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -104,7 +103,6 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
     // Check if we're in a browser environment (Client-side only)
     if (typeof window === 'undefined') {
         // Server-side - we don't have DOMParser, so return basic feed with empty episodes
-        console.warn('XML parsing not available on server-side');
         return {
             ...baseFeed,
             episodes: []
@@ -157,8 +155,6 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         }
     }
 
-    console.log("Found feed cover image:", coverImage);
-
     // Find all items (episodes)
     const items = xmlDoc.querySelectorAll("item");
     const episodes: Episode[] = Array.from(items).map((item, index) => {
@@ -169,7 +165,6 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         const pubDate = item.querySelector("pubDate")?.textContent || "";
 
         // Handle namespaced elements - multiple approaches to find the right one
-        // First try with namespace prefix
         let duration = "";
         let image = "";
 

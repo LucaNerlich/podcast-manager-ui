@@ -31,61 +31,37 @@ export default function HomePage() {
             // Always fetch public feeds
             const publicFeedsData = await getPublicFeeds();
 
-            // Create a copy to avoid mutating the original
-            const detailedPublicFeeds: Feed[] = [];
+            // Create arrays for the Promise.all calls
+            const publicFeedPromises = publicFeedsData.map(feed =>
+                getFeedWithEpisodesBySlug(feed.slug, feed)
+                    .catch(err => {
+                        // Handle errors for individual feeds
+                        return {...feed, episodes: []};
+                    })
+            );
 
-            // Fetch complete feed with episodes for each public feed
-            for (let i = 0; i < publicFeedsData.length; i++) {
-                try {
-                    // Fetch and parse the XML feed
-                    const feedWithEpisodes = await getFeedWithEpisodesBySlug(
-                        publicFeedsData[i].slug,
-                        publicFeedsData[i]
-                    );
-                    detailedPublicFeeds.push(feedWithEpisodes);
-                } catch (err) {
-                    console.error(`Error fetching feed with slug ${publicFeedsData[i].slug}:`, err);
-                    // Add the basic feed without episodes if XML parsing fails
-                    detailedPublicFeeds.push({
-                        ...publicFeedsData[i],
-                        episodes: []
-                    });
-                }
-            }
-
+            // Fetch all public feeds in parallel
+            const detailedPublicFeeds = await Promise.all(publicFeedPromises);
             setPublicFeeds(detailedPublicFeeds);
 
             // Fetch private feeds if user is logged in
             if (jwt) {
                 const privateFeedsData = await getPrivateFeeds(jwt);
 
-                // Create a copy to avoid mutating the original
-                const detailedPrivateFeeds: Feed[] = [];
+                // Create private feed promises array
+                const privateFeedPromises = privateFeedsData.map(feed =>
+                    getFeedWithEpisodesBySlug(feed.slug, feed, jwt)
+                        .catch(err => {
+                            // Handle errors for individual feeds
+                            return {...feed, episodes: []};
+                        })
+                );
 
-                // Fetch complete feed with episodes for each private feed
-                for (let i = 0; i < privateFeedsData.length; i++) {
-                    try {
-                        // Fetch and parse the XML feed
-                        const feedWithEpisodes = await getFeedWithEpisodesBySlug(
-                            privateFeedsData[i].slug,
-                            privateFeedsData[i],
-                            user?.token
-                        );
-                        detailedPrivateFeeds.push(feedWithEpisodes);
-                    } catch (err) {
-                        console.error(`Error fetching feed with slug ${privateFeedsData[i].slug}:`, err);
-                        // Add the basic feed without episodes if XML parsing fails
-                        detailedPrivateFeeds.push({
-                            ...privateFeedsData[i],
-                            episodes: []
-                        });
-                    }
-                }
-
+                // Fetch all private feeds in parallel
+                const detailedPrivateFeeds = await Promise.all(privateFeedPromises);
                 setPrivateFeeds(detailedPrivateFeeds);
             }
         } catch (err) {
-            console.error('Error fetching feeds:', err);
             setError('Failed to load feeds. Please try again later.');
         } finally {
             setLoading(false);
@@ -113,7 +89,7 @@ export default function HomePage() {
                 {publicFeeds.length > 0 ? (
                     <div className="feed-grid">
                         {publicFeeds.map((feed) => (
-                            <FeedCard key={feed.slug} feed={feed} isPublic/>
+                            <FeedCard key={feed.slug} feed={feed}/>
                         ))}
                     </div>
                 ) : (
@@ -127,7 +103,7 @@ export default function HomePage() {
                     {privateFeeds.length > 0 ? (
                         <div className="feed-grid">
                             {privateFeeds.map((feed) => (
-                                <FeedCard key={feed.documentId} feed={feed}/>
+                                <FeedCard key={feed.slug} feed={feed}/>
                             ))}
                         </div>
                     ) : (

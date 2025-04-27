@@ -8,15 +8,18 @@ import Link from "next/link";
 
 interface FeedCardProps {
     feed: Feed;
-    isPublic?: boolean;
 }
 
-export default function FeedCard({feed, isPublic}: FeedCardProps) {
+// Default placeholder images
+const DEFAULT_FEED_IMAGE = 'https://placehold.co/400x400/3498db/ffffff?text=FEED';
+const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=EP';
+
+export default function FeedCard({feed}: FeedCardProps) {
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
     const {user} = useAuth();
 
-    const feedImage = feed.cover || "";
+    const feedImage = feed.cover || DEFAULT_FEED_IMAGE;
 
     const copyFeedUrl = async () => {
         try {
@@ -42,7 +45,7 @@ export default function FeedCard({feed, isPublic}: FeedCardProps) {
 
                 <div>
                     <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
-                        {isPublic ? 'Public' : 'Private'}
+                        {feed.public ? 'Public' : 'Private'}
                     </span>
                     <h3 className="feed-title">{feed.title}</h3>
                 </div>
@@ -94,7 +97,7 @@ interface EpisodeItemProps {
 function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const downloadUrl = getEpisodeDownloadUrl(episode.guid, userToken);
     const [copied, setCopied] = useState(false);
-    const episodeImage = episode.cover || "";
+    const episodeImage = episode.cover || DEFAULT_EPISODE_IMAGE;
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);
