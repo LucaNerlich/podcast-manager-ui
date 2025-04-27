@@ -59,7 +59,14 @@ export default function HomePage() {
 
                 // Fetch all private feeds in parallel
                 const detailedPrivateFeeds = await Promise.all(privateFeedPromises);
-                setPrivateFeeds(detailedPrivateFeeds);
+
+                // Filter out private feeds that are already in public feeds
+                const uniquePrivateFeeds = detailedPrivateFeeds.filter(
+                    privateFeed => !detailedPublicFeeds.some(
+                        publicFeed => publicFeed.slug === privateFeed.slug
+                    )
+                );
+                setPrivateFeeds(uniquePrivateFeeds);
             }
         } catch (err) {
             setError('Failed to load feeds. Please try again later.');

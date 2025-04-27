@@ -61,11 +61,11 @@ export async function GET(
         const description = channel.description;
 
         // Extract feed image
-        let coverImage = "";
+        let cover = "";
         if (channel.image?.url) {
-            coverImage = channel.image.url;
+            cover = channel.image.url;
         } else if (channel["itunes:image"]?._href) {
-            coverImage = channel["itunes:image"]._href;
+            cover = channel["itunes:image"]._href;
         }
 
         // Extract episodes
@@ -118,7 +118,8 @@ export async function GET(
         return NextResponse.json({
             title,
             description,
-            cover: coverImage,
+            cover,
+            slug,
             episodes
         });
     } catch (error) {
