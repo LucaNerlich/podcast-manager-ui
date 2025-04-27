@@ -34,7 +34,6 @@ export default function FeedCard({feed}: FeedCardProps) {
                     <Image
                         src={feedImage}
                         alt={feed.title}
-                        objectFit="cover"
                         fill
                         className="avatar-img"
                     />
@@ -121,7 +120,6 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                     <Image
                         src={episodeImage}
                         alt={episode.title}
-                        objectFit="cover"
                         fill
                         className="avatar-img"
                     />

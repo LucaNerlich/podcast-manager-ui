@@ -118,6 +118,45 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
     const channel = xmlDoc.querySelector("channel");
     const description = channel?.querySelector("description")?.textContent || baseFeed.description;
     const title = channel?.querySelector("title")?.textContent || baseFeed.title;
+    
+    // Extract feed cover image
+    let coverImage = baseFeed.cover || "";
+    
+    // Try standard image tag first
+    const imageElement = channel?.querySelector("image > url");
+    if (imageElement && imageElement.textContent) {
+        coverImage = imageElement.textContent;
+    }
+    
+    // Try itunes:image tag if standard image not found
+    if (!coverImage && channel) {
+        // Try with different selectors for namespaced elements
+        const imageSelectors = [
+            "itunes\\:image",
+            "*|image"
+        ];
+        
+        for (const selector of imageSelectors) {
+            const itunesImageElement = channel.querySelector(selector);
+            if (itunesImageElement && itunesImageElement.getAttribute("href")) {
+                coverImage = itunesImageElement.getAttribute("href") || "";
+                break;
+            }
+        }
+        
+        // If still not found, try serializing and using regex
+        if (!coverImage) {
+            const serializer = new XMLSerializer();
+            const channelXml = serializer.serializeToString(channel);
+            
+            const imageMatch = channelXml.match(/<itunes:image[^>]*href="([^"]*)"[^>]*>/i);
+            if (imageMatch && imageMatch[1]) {
+                coverImage = imageMatch[1];
+            }
+        }
+    }
+    
+    console.log("Found feed cover image:", coverImage);
 
     // Find all items (episodes)
     const items = xmlDoc.querySelectorAll("item");
@@ -204,6 +243,7 @@ export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, to
         ...baseFeed,
         description,
         title,
+        cover: coverImage,
         episodes
     };
 };

@@ -113,7 +113,7 @@ export default function HomePage() {
                 {publicFeeds.length > 0 ? (
                     <div className="feed-grid">
                         {publicFeeds.map((feed) => (
-                            <FeedCard key={feed.documentId} feed={feed}/>
+                            <FeedCard key={feed.slug} feed={feed}/>
                         ))}
                     </div>
                 ) : (
