@@ -29,8 +29,6 @@ export async function GET(
             ? `${API_URL}/feeds/slug/${slug}/token/${token}`
             : `${API_URL}/feeds/slug/${slug}`;
 
-        console.log("url", url);
-
         const response = await fetch(url);
 
         if (!response.ok) {
