@@ -1,90 +1,106 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import {useAuth} from '../context/AuthContext';
+import {useFormState, useFormStatus} from 'react-dom';
+import Form from "next/form";
+
+// Login Submit Button with loading state
+function SubmitButton() {
+  const {pending} = useFormStatus();
+
+  return (
+      <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={pending}
+      >
+        {pending ? 'Logging in...' : 'Login'}
+      </button>
+  );
+}
+
+// Initial state
+const initialState = {
+  error: '',
+};
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [isLoggingIn, setIsLoggingIn] = useState(false);
-    const {login, user} = useAuth();
-    const router = useRouter();
+  const {login, user} = useAuth();
+  const router = useRouter();
 
-    useEffect(() => {
-        // If user is already logged in, redirect to dashboard
-        if (user) {
-            router.push('/');
-        }
-    }, [user, router]);
+  // Form action function
+  const loginAction = async (prevState: typeof initialState, formData: FormData) => {
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    if (!username || !password) {
+      return {error: 'Username and password are required'};
+    }
 
-        if (!username || !password) {
-            setError('Username and password are required');
-            return;
-        }
+    try {
+      await login(username, password);
+      return {error: ''};
+    } catch (err) {
+      return {error: 'Invalid username or password'};
+    }
+  };
 
-        try {
-            setIsLoggingIn(true);
-            setError('');
+  // Form state using useFormState
+  const [state, formAction] = useFormState(loginAction, initialState);
 
-            await login(username, password);
-            router.push('/');
-        } catch (err) {
-            setError('Invalid username or password');
-        } finally {
-            setIsLoggingIn(false);
-        }
-    };
+  useEffect(() => {
+    // If user is already logged in, redirect to dashboard
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
 
-    return (
-        <div className="container">
-            <div className="login-form card">
-                <h1>Login to Podcast Manager</h1>
+  // If login was successful and error is cleared, redirect
+  useEffect(() => {
+    if (user && !state.error) {
+      router.push('/');
+    }
+  }, [user, state.error, router]);
 
-                {error && (
-                    <div style={{color: 'var(--danger-color)', marginBottom: '1rem'}}>
-                        {error}
-                    </div>
-                )}
+  return (
+      <div className="container">
+        <div className="login-form card">
+          <h1>Login to Podcast Manager</h1>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input
-                            type="text"
-                            id="username"
-                            className="form-control"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            disabled={isLoggingIn}
-                        />
-                    </div>
+          {state.error && (
+              <div style={{color: 'var(--danger-color)', marginBottom: '1rem'}}>
+                {state.error}
+              </div>
+          )}
 
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={isLoggingIn}
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        disabled={isLoggingIn}
-                    >
-                        {isLoggingIn ? 'Logging in...' : 'Login'}
-                    </button>
-                </form>
+          <Form action={formAction}>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  className="form-control"
+                  required
+              />
             </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  className="form-control"
+                  required
+              />
+            </div>
+
+            <SubmitButton/>
+          </Form>
         </div>
-    );
+      </div>
+  );
 }
