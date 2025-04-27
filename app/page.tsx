@@ -96,7 +96,7 @@ export default function HomePage() {
                 {publicFeeds.length > 0 ? (
                     <div className="feed-grid">
                         {publicFeeds.map((feed) => (
-                            <FeedCard key={feed.slug} feed={feed} isPublic/>
+                            <FeedCard key={feed.slug} feed={feed}/>
                         ))}
                     </div>
                 ) : (
@@ -110,7 +110,7 @@ export default function HomePage() {
                     {privateFeeds.length > 0 ? (
                         <div className="feed-grid">
                             {privateFeeds.map((feed) => (
-                                <FeedCard key={crypto.randomUUID()} feed={feed} isPublic={false}/>
+                                <FeedCard key={crypto.randomUUID()} feed={feed}/>
                             ))}
                         </div>
                     ) : (

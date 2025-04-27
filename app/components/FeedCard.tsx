@@ -8,13 +8,12 @@ import Link from "next/link";
 
 interface FeedCardProps {
     feed: Feed;
-    isPublic: boolean;
 }
 
 // Number of episodes per page
 const EPISODES_PER_PAGE = 5;
 
-export default function FeedCard({feed, isPublic}: FeedCardProps) {
+export default function FeedCard({feed}: FeedCardProps) {
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -96,10 +95,9 @@ export default function FeedCard({feed, isPublic}: FeedCardProps) {
                 )}
 
                 <div className={!hasValidCover ? "feed-info-full" : "feed-info"}>
-                    <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
-                        {isPublic ? 'Public' : 'Private'}
-                    </span>
-                    <h3 className="feed-title">{feed.title}</h3>
+                    <Link href={`/feed/${feed.slug}`} className="feed-title-link">
+                        <h3 className="feed-title">{feed.title}</h3>
+                    </Link>
                 </div>
             </div>
 
@@ -119,6 +117,10 @@ export default function FeedCard({feed, isPublic}: FeedCardProps) {
                 >
                     {showEpisodes ? 'Hide Episodes' : 'Show Episodes'}
                 </button>
+
+                <Link href={`/feed/${feed.slug}`} className="btn btn-secondary">
+                    View Details
+                </Link>
             </div>
 
             {showEpisodes && feed.episodes && (

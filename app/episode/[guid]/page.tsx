@@ -63,7 +63,7 @@ export default async function EpisodePage({params}: { params: { guid: string } }
 
                         {feed && (
                             <div className="feed-info">
-                                <Link href={`/?feed=${feed.slug}`} className="feed-link">
+                                <Link href={`/feed/${feed.slug}`} className="feed-link">
                                     {feed.title}
                                 </Link>
                                 <span className={`badge ${feed.public ? 'badge-primary' : 'badge-secondary'}`}>
@@ -124,7 +124,7 @@ export default async function EpisodePage({params}: { params: { guid: string } }
                                                 <line x1="12" y1="19" x2="12" y2="23"></line>
                                                 <line x1="8" y1="23" x2="16" y2="23"></line>
                                             </svg>
-                                            <span>From: {feed.title}</span>
+                                            <span>From: <Link href={`/feed/${feed.slug}`}>{feed.title}</Link></span>
                                         </div>
                                     )}
                                 </div>

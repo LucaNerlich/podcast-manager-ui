@@ -22,7 +22,6 @@ export async function GET(
     const {slug} = await params;
     const {searchParams} = new URL(request.url);
     const token = searchParams.get('token');
-
     try {
         // Fetch the XML feed
         const url = token

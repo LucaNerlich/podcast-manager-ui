@@ -524,3 +524,145 @@ a {
         padding: 0.9rem 1rem;
     }
 }
+
+/* Feed Detail Page */
+.feed-detail-page {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.feed-detail-card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.feed-detail-content {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.feed-image-container {
+    flex-shrink: 0;
+}
+
+.feed-detail-image {
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.feed-detail-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.feed-detail-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.feed-detail-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.feed-url {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.feed-detail-description {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+.feed-detail-description h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.feed-episodes {
+    margin-top: 2rem;
+}
+
+.feed-episodes h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.feed-episodes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.feed-episode-item {
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-card);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: all 0.2s ease;
+}
+
+.feed-episode-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.feed-episode-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.feed-episode-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.no-episodes {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    background-color: var(--bg-light);
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .feed-detail-content {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .feed-image-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .feed-detail-title {
+        font-size: 1.5rem;
+    }
+
+    .feed-detail-metadata {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+
+.feed-title-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.feed-title-link:hover .feed-title {
+    color: var(--primary-color);
+}

@@ -78,9 +78,14 @@ export const getPrivateFeeds = async (token: string): Promise<Feed[]> => {
  * Fetches complete feed data including episodes from our Next.js API route
  */
 export const getFeedFromApi = async (slug: string, token?: string): Promise<Feed> => {
+    // Use absolute URLs for server components
+    const baseUrl = typeof window === 'undefined'
+        ? process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+        : '';
+
     const url = token
-        ? `/api/feeds/${slug}?token=${token}`
-        : `/api/feeds/${slug}`;
+        ? `${baseUrl}/api/feeds/${slug}?token=${token}`
+        : `${baseUrl}/api/feeds/${slug}`;
 
     const response = await fetch(url);
 
