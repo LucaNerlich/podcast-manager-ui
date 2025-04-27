@@ -10,17 +10,13 @@ interface FeedCardProps {
     feed: Feed;
 }
 
-// Default placeholder images
-const DEFAULT_FEED_IMAGE = 'https://placehold.co/400x400/3498db/ffffff?text=FEED';
-const DEFAULT_EPISODE_IMAGE = 'https://placehold.co/400x400/2c3e50/ffffff?text=EP';
-
 export default function FeedCard({feed}: FeedCardProps) {
     console.log("feed", feed);
     const [showEpisodes, setShowEpisodes] = useState(false);
     const [copied, setCopied] = useState(false);
     const {user} = useAuth();
 
-    const feedImage = feed.cover || DEFAULT_FEED_IMAGE;
+    const feedImage = feed.cover || "";
 
     const copyFeedUrl = async () => {
         try {
@@ -99,7 +95,7 @@ interface EpisodeItemProps {
 function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     const downloadUrl = getEpisodeDownloadUrl(episode.guid, userToken);
     const [copied, setCopied] = useState(false);
-    const episodeImage = episode.cover || DEFAULT_EPISODE_IMAGE;
+    const episodeImage = episode.cover || "";
 
     // Format date
     const releasedDate = new Date(episode.releasedAt);

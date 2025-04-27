@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {Feed, getFeedEpisodes, getPrivateFeeds, getPublicFeeds} from './utils/api';
+import {Feed, getFeedEpisodes, getPrivateFeeds, getPublicFeeds, getFeedWithEpisodesBySlug} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
 
@@ -29,51 +29,64 @@ export default function HomePage() {
             setError('');
 
             // Always fetch public feeds
-            let publicFeedsData = await getPublicFeeds();
-
-            // Process feed data to extract image URLs
-            publicFeedsData = publicFeedsData.map(feed => {
-                return {
-                    ...feed,
-                };
-            });
-
-            // Fetch episodes for each public feed
+            const publicFeedsData = await getPublicFeeds();
+            console.log("publicFeedsData", publicFeedsData);
+            
+            // Create a copy to avoid mutating the original
+            const detailedPublicFeeds: Feed[] = [];
+            
+            // Fetch complete feed with episodes for each public feed
             for (let i = 0; i < publicFeedsData.length; i++) {
                 try {
-                    const episodes = await getFeedEpisodes(publicFeedsData[i].documentId);
-                    publicFeedsData[i].episodes = episodes;
+                    // Fetch and parse the XML feed
+                    const feedWithEpisodes = await getFeedWithEpisodesBySlug(
+                        publicFeedsData[i].slug, 
+                        publicFeedsData[i]
+                    );
+                    detailedPublicFeeds.push(feedWithEpisodes);
                 } catch (err) {
-                    console.error(`Error fetching episodes for feed ${publicFeedsData[i].title}:`, err);
-                    publicFeedsData[i].episodes = [];
+                    console.error(`Error fetching feed with slug ${publicFeedsData[i].slug}:`, err);
+                    // Add the basic feed without episodes if XML parsing fails
+                    detailedPublicFeeds.push({
+                        ...publicFeedsData[i],
+                        episodes: []
+                    });
                 }
             }
-
-            setPublicFeeds(publicFeedsData);
+            
+            console.log("detailedPublicFeeds", detailedPublicFeeds);
+            setPublicFeeds(detailedPublicFeeds);
 
             // Fetch private feeds if user is logged in
             if (jwt) {
-                let privateFeedsData = await getPrivateFeeds(jwt);
+                const privateFeedsData = await getPrivateFeeds(jwt);
                 console.log("privateFeedsData", privateFeedsData);
-                // Process feed data to extract image URLs
-                privateFeedsData = privateFeedsData.map(feed => {
-                    return {
-                        ...feed,
-                    };
-                });
-
-                // Fetch episodes for each private feed
+                
+                // Create a copy to avoid mutating the original
+                const detailedPrivateFeeds: Feed[] = [];
+                
+                // Fetch complete feed with episodes for each private feed
                 for (let i = 0; i < privateFeedsData.length; i++) {
                     try {
-                        const episodes = await getFeedEpisodes(privateFeedsData[i].documentId, jwt);
-                        privateFeedsData[i].episodes = episodes;
+                        // Fetch and parse the XML feed
+                        const feedWithEpisodes = await getFeedWithEpisodesBySlug(
+                            privateFeedsData[i].slug, 
+                            privateFeedsData[i],
+                            jwt
+                        );
+                        detailedPrivateFeeds.push(feedWithEpisodes);
                     } catch (err) {
-                        console.error(`Error fetching episodes for feed ${privateFeedsData[i].title}:`, err);
-                        privateFeedsData[i].episodes = [];
+                        console.error(`Error fetching feed with slug ${privateFeedsData[i].slug}:`, err);
+                        // Add the basic feed without episodes if XML parsing fails
+                        detailedPrivateFeeds.push({
+                            ...privateFeedsData[i],
+                            episodes: []
+                        });
                     }
                 }
-
-                setPrivateFeeds(privateFeedsData);
+                
+                console.log("detailedPrivateFeeds", detailedPrivateFeeds);
+                setPrivateFeeds(detailedPrivateFeeds);
             }
         } catch (err) {
             console.error('Error fetching feeds:', err);

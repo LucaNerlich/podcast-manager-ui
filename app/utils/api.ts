@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API || 'http://localhost:1337';
+const API_URL = process.env.NEXT_PUBLIC_API || 'http://localhost:1337/api';
 
 export interface LoginResponse {
     jwt: string;
@@ -86,36 +86,73 @@ export const getFeedBySlug = async (slug: string, token?: string): Promise<Feed>
     return response.json();
 };
 
+// Function to fetch XML feed from the slug endpoint and parse it to extract feed details and episodes
+export const getFeedWithEpisodesBySlug = async (slug: string, baseFeed: Feed, token?: string): Promise<Feed> => {
+    const url = token
+        ? `${API_URL}/feeds/slug/${slug}/token/${token}`
+        : `${API_URL}/feeds/slug/${slug}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch feed XML with slug: ${slug}`);
+    }
+
+    // Get the XML content
+    const xmlText = await response.text();
+
+    // Check if we're in a browser environment (Client-side only)
+    if (typeof window === 'undefined') {
+        // Server-side - we don't have DOMParser, so return basic feed with empty episodes
+        console.warn('XML parsing not available on server-side');
+        return {
+            ...baseFeed,
+            episodes: []
+        };
+    }
+
+    // Parse the XML (Client-side only)
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+    // Extract feed details (if needed)
+    const channel = xmlDoc.querySelector("channel");
+    const description = channel?.querySelector("description")?.textContent || baseFeed.description;
+    const title = channel?.querySelector("title")?.textContent || baseFeed.title;
+
+    // Find all items (episodes)
+    const items = xmlDoc.querySelectorAll("item");
+    const episodes: Episode[] = Array.from(items).map((item, index) => {
+        // Extract episode data
+        const guid = item.querySelector("guid")?.textContent || `episode-${index}`;
+        const title = item.querySelector("title")?.textContent || `Episode ${index + 1}`;
+        const description = item.querySelector("description")?.textContent || "";
+        const pubDate = item.querySelector("pubDate")?.textContent || "";
+        const duration = item.querySelector("itunes\\:duration")?.textContent || "0";
+        const image = item.querySelector("itunes\\:image")?.getAttribute("href") || "";
+
+        return {
+            documentId: index,
+            guid,
+            title,
+            description,
+            duration: parseInt(duration) || 0,
+            releasedAt: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
+            cover: image
+        };
+    });
+
+    // Return the feed with episodes
+    return {
+        ...baseFeed,
+        description,
+        title,
+        episodes
+    };
+};
+
 export const getEpisodeDownloadUrl = (episodeGuid: string, token?: string): string => {
     return token
         ? `${API_URL}/episodes/${episodeGuid}/download?token=${token}`
         : `${API_URL}/episodes/${episodeGuid}/download`;
-};
-
-// New function to fetch episodes for a feed
-export const getFeedEpisodes = async (feedDocId: string, token?: string): Promise<Episode[]> => {
-    // Use standard Strapi endpoint to get the feed with its episodes
-    const url = `${API_URL}/feeds/${feedDocId}?populate=episodes`;
-
-    const headers: HeadersInit = {};
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response = await fetch(url, {headers});
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch episodes for feed: ${feedDocId}`);
-    }
-
-    const data = await response.json();
-    return data.data.attributes.episodes.data.map((episode: any) => ({
-        id: episode.id,
-        guid: episode.attributes.guid || episode.id.toString(),
-        title: episode.attributes.title,
-        description: episode.attributes.description,
-        duration: episode.attributes.duration,
-        releasedAt: episode.attributes.releasedAt,
-        imageUrl: episode.attributes.image?.data?.url
-    }));
 };
