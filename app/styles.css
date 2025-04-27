@@ -144,7 +144,6 @@
 
 .episode-item {
     border-bottom: 1px solid var(--light-gray);
-    padding: 15px 0;
 }
 
 .episode-item:last-child {
