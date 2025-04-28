@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {Feed, getEpisodeByGuid, getEpisodeDownloadUrl, getFeedFromApi} from '../../utils/api';
 import {getServerSideAuth} from '../../utils/serverAuth';
-import EpisodeActions from './EpisodeActions';
+import EpisodeActions from "@/app/episode/[guid]/EpisodeActions";
 
 // Format duration helper
 function formatDuration(seconds: number) {
@@ -59,8 +59,6 @@ export default async function EpisodePage({params}: { params: { guid: string } }
             <div className="container">
                 <div className="episode-detail-page">
                     <div className="episode-detail-header">
-                        <EpisodeActions downloadUrl={downloadUrl}/>
-
                         {feed && (
                             <div className="feed-info">
                                 <Link href={`/feed/${feed.slug}`} className="feed-link">
@@ -128,11 +126,12 @@ export default async function EpisodePage({params}: { params: { guid: string } }
                                         </div>
                                     )}
                                 </div>
+                                <EpisodeActions downloadUrl={downloadUrl}/>
                             </div>
                         </div>
 
                         <div className="episode-detail-description">
-                            <h2>Description</h2>
+                            <h2>Beschreibung</h2>
                             <div className="description-content">
                                 {episode.description}
                             </div>

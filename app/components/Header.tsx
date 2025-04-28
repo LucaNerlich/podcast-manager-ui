@@ -25,7 +25,7 @@ export default function Header() {
             <nav>
                 {user ? (
                     <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                        <span>Welcome, {user.username}</span>
+                        <span>Willkommen, {user.username}</span>
                         <button onClick={handleLogout} className="btn btn-secondary">
                             Logout
                         </button>

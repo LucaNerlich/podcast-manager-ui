@@ -111,18 +111,18 @@ export default function FeedCard({feed}: FeedCardProps) {
                     onClick={copyFeedUrl}
                     className="btn btn-primary"
                 >
-                    {copied ? '✓ Feed URL Copied!' : 'Copy Feed URL'}
+                    {copied ? '✓ Feed URL kopiert!' : 'Feed URL kopieren'}
                 </button>
 
                 <button
                     className="btn btn-primary"
                     onClick={() => setShowEpisodes(!showEpisodes)}
                 >
-                    {showEpisodes ? 'Hide Episodes' : 'Show Episodes'}
+                    {showEpisodes ? 'Episodes verstecken' : 'Episoden anzeigen'}
                 </button>
 
                 <Link href={`/feed/${feed.slug}`} className="btn btn-secondary">
-                    View Details
+                    Feed Details
                 </Link>
             </div>
 

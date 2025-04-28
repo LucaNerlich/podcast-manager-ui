@@ -24,17 +24,6 @@ export default function EpisodeActions({downloadUrl}: EpisodeActionsProps) {
 
     return (
         <>
-            <button
-                className="btn btn-outline back-button"
-                onClick={() => router.back()}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
-                </svg>
-                Back
-            </button>
-
             <div className="episode-actions-detail">
                 <Link
                     href={downloadUrl}
@@ -47,7 +36,7 @@ export default function EpisodeActions({downloadUrl}: EpisodeActionsProps) {
                         <path
                             d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"></path>
                     </svg>
-                    Download Episode
+                    &nbsp;Episode herunterladen
                 </Link>
 
                 <button
@@ -60,7 +49,7 @@ export default function EpisodeActions({downloadUrl}: EpisodeActionsProps) {
                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            Copied!
+                            &nbsp;Kopiert!
                         </>
                     ) : (
                         <>
@@ -70,7 +59,7 @@ export default function EpisodeActions({downloadUrl}: EpisodeActionsProps) {
                                 <path
                                     d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                             </svg>
-                            Copy URL
+                            &nbsp;URL kopieren
                         </>
                     )}
                 </button>

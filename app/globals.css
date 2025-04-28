@@ -194,24 +194,6 @@ a {
     text-decoration: underline;
 }
 
-/* Adjust episode buttons to be more compact */
-.episode-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
-    flex: 1;
-    justify-content: center;
-    min-height: 36px;
-}
-
-.episode-btn svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-}
-
 /* Adjust episode actions container */
 .episode-actions {
     display: flex;
@@ -357,14 +339,6 @@ a {
     flex-wrap: wrap;
     gap: 1.5rem;
     margin-bottom: 2rem;
-}
-
-.metadata-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
 }
 
 .episode-actions-detail {
@@ -573,11 +547,9 @@ a {
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
-}
-
-.feed-url {
-    color: var(--primary-color);
-    text-decoration: underline;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
 .feed-detail-description {

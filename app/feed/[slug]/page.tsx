@@ -43,18 +43,12 @@ export default async function FeedPage({params}: { params: { slug: string } }) {
 
                             <div className="feed-detail-info">
                                 <h1 className="feed-detail-title">{feed.title}</h1>
-
                                 <div className="feed-detail-metadata">
-                                    <div className="metadata-item">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                                        </svg>
-                                        <span>{feed.episodes?.length || 0} Episodes</span>
-                                    </div>
-
-                                    <div className="metadata-item">
+                                    <span>🎙️{feed.episodes?.length || 0} Episoden</span>
+                                    <Link
+                                        href={feedUrl}
+                                        target="_blank"
+                                        className="btn btn-primary episode-btn">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <path
@@ -62,17 +56,14 @@ export default async function FeedPage({params}: { params: { slug: string } }) {
                                             <path
                                                 d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                                         </svg>
-                                        <Link href={feedUrl} target="_blank" rel="noopener noreferrer"
-                                              className="feed-url">
-                                            RSS Feed
-                                        </Link>
-                                    </div>
+                                        &nbsp;RSS Feed
+                                    </Link>
                                 </div>
                             </div>
                         </div>
 
                         <div className="feed-detail-description">
-                            <h2>Description</h2>
+                            <h2>Beschreibung</h2>
                             <div className="description-content">
                                 {feed.description}
                             </div>
@@ -80,7 +71,7 @@ export default async function FeedPage({params}: { params: { slug: string } }) {
                     </div>
 
                     <div className="feed-episodes">
-                        <h2>Episodes</h2>
+                        <h2>Episoden</h2>
                         <div className="feed-episodes-list">
                             {feed.episodes && feed.episodes.length > 0 ? (
                                 feed.episodes.map(episode => (

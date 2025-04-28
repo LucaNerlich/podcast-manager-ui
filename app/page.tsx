@@ -92,7 +92,7 @@ export default function HomePage() {
             )}
 
             <section>
-                <h2>Public Feeds</h2>
+                <h2>Öffentliche Feeds</h2>
                 {publicFeeds.length > 0 ? (
                     <div className="feed-grid">
                         {publicFeeds.map((feed) => (

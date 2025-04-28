@@ -18,18 +18,19 @@
 }
 
 .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-    padding: 6px 14px;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    align-items: center;
     border-radius: var(--border-radius);
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-    cursor: pointer;
     border: none;
+    cursor: pointer;
+    display: flex;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 6px 14px;
+    text-align: center;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    user-select: none;
+    vertical-align: middle;
 }
 
 .btn-primary {
