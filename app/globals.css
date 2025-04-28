@@ -181,6 +181,11 @@ a {
     padding: 0 0.25rem;
 }
 
+.metadata-item {
+    display: flex;
+    align-items: center;
+}
+
 .read-more-btn {
     background: none;
     border: none;
@@ -265,34 +270,33 @@ a {
 
 /* Episode Detail Page */
 .episode-detail-page {
-    max-width: 900px;
+    padding: 1.5rem 0;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 2rem 0;
 }
 
 .episode-detail-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .back-button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .feed-info {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .feed-link {
     color: var(--primary-color);
     font-weight: 500;
-    text-decoration: none;
+    transition: text-decoration 0.2s ease;
 }
 
 .feed-link:hover {
@@ -300,17 +304,17 @@ a {
 }
 
 .episode-detail-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     background-color: var(--bg-card);
     border-radius: 12px;
-    box-shadow: 0 8px 16px var(--shadow-color);
-    overflow: hidden;
-    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .episode-detail-content {
     display: flex;
-    padding: 2rem;
-    gap: 2rem;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .episode-image-container {
@@ -319,48 +323,48 @@ a {
 
 .episode-detail-image {
     border-radius: 8px;
-    box-shadow: 0 4px 8px var(--shadow-color);
-    object-fit: cover;
+    box-shadow: 0 2px 6px var(--shadow-color);
 }
 
 .episode-detail-info {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 }
 
 .episode-detail-title {
     font-size: 1.8rem;
-    margin: 0 0 1.5rem 0;
+    font-weight: 700;
+    margin: 0;
 }
 
 .episode-detail-metadata {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    color: var(--text-secondary);
 }
 
 .episode-actions-detail {
     display: flex;
-    gap: 1rem;
-    margin-top: auto;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .episode-detail-description {
-    padding: 0 2rem 2rem;
-    border-top: 1px solid var(--border-color);
     padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .description-content {
     line-height: 1.6;
-    margin-top: 1rem;
+    color: var(--text-secondary);
     white-space: pre-line;
 }
 
 .more-episodes {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .more-episodes h2 {
@@ -370,18 +374,15 @@ a {
 .more-episodes-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
 }
 
 .more-episode-item {
-    display: flex;
-    justify-content: space-between;
     padding: 1rem;
     border-radius: 8px;
-    text-decoration: none;
-    color: var(--text-primary);
     background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    display: block;
     transition: background-color 0.2s ease;
 }
 
@@ -390,57 +391,43 @@ a {
 }
 
 .more-episode-title {
-    font-weight: 500;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
 }
 
 .more-episode-date {
+    font-size: 0.85rem;
     color: var(--text-secondary);
-    font-size: 0.9rem;
 }
 
 .view-all-link {
-    display: block;
-    text-align: center;
+    display: inline-block;
+    margin-top: 0.75rem;
     color: var(--primary-color);
+    font-weight: 500;
     text-decoration: none;
-    padding: 0.5rem;
-    margin-top: 1rem;
 }
 
 .view-all-link:hover {
     text-decoration: underline;
 }
 
-.error-message {
-    color: var(--danger-color);
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background-color: rgba(var(--danger-rgb, 231, 76, 60, 0.1));
-    border-radius: 8px;
-    text-align: center;
-}
-
-/* Responsive adjustments for episode detail page */
 @media (max-width: 768px) {
     .episode-detail-content {
         flex-direction: column;
-        padding: 1.5rem;
-        gap: 1.5rem;
     }
 
     .episode-image-container {
-        margin: 0 auto;
-        max-width: 250px;
+        max-width: 200px;
+        margin: 0 auto 1rem;
     }
 
     .episode-detail-title {
         font-size: 1.5rem;
-        margin-bottom: 1rem;
     }
 
     .episode-detail-metadata {
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+        flex-direction: column;
     }
 
     .episode-actions-detail {
@@ -448,7 +435,7 @@ a {
     }
 
     .episode-detail-description {
-        padding: 0 1.5rem 1.5rem;
+        padding-top: 1rem;
     }
 }
 
@@ -501,22 +488,22 @@ a {
 
 /* Feed Detail Page */
 .feed-detail-page {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    padding: 1.5rem 0;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .feed-detail-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     background-color: var(--bg-card);
     border-radius: 12px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .feed-detail-content {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
@@ -525,49 +512,45 @@ a {
 }
 
 .feed-detail-image {
-    border-radius: 12px;
-    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px var(--shadow-color);
 }
 
 .feed-detail-info {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
     justify-content: center;
 }
 
 .feed-detail-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin: 0;
 }
 
 .feed-detail-metadata {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
     align-items: center;
+    gap: 1rem;
     color: var(--text-secondary);
-    font-size: 0.9rem;
 }
 
 .feed-detail-description {
-    border-top: 1px solid var(--border-color);
     padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .feed-detail-description h2 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .feed-episodes {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .feed-episodes h2 {
-    font-size: 1.5rem;
     margin-bottom: 1rem;
 }
 
@@ -578,22 +561,21 @@ a {
 }
 
 .feed-episode-item {
-    display: block;
     padding: 1rem;
     border-radius: 8px;
     background-color: var(--bg-card);
-    box-shadow: 0 2px 8px var(--shadow-color);
-    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+    display: block;
+    transition: background-color 0.2s ease;
 }
 
 .feed-episode-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow-color);
+    background-color: var(--bg-light);
 }
 
 .feed-episode-title {
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .feed-episode-date {
@@ -601,9 +583,9 @@ a {
     color: var(--text-secondary);
 }
 
-.no-episodes {
+.no-items {
+    padding: 1.5rem;
     text-align: center;
-    padding: 2rem;
     color: var(--text-secondary);
     background-color: var(--bg-light);
     border-radius: 8px;
@@ -612,12 +594,11 @@ a {
 @media (max-width: 768px) {
     .feed-detail-content {
         flex-direction: column;
-        gap: 1.5rem;
     }
 
     .feed-image-container {
-        display: flex;
-        justify-content: center;
+        max-width: 200px;
+        margin: 0 auto 1rem;
     }
 
     .feed-detail-title {
@@ -626,7 +607,7 @@ a {
 
     .feed-detail-metadata {
         flex-direction: column;
-        gap: 0.75rem;
+        align-items: flex-start;
     }
 }
 
@@ -637,4 +618,145 @@ a {
 
 .feed-title-link:hover .feed-title {
     color: var(--primary-color);
+}
+
+/* Unified Detail Card Styles */
+.detail-page {
+    padding: 1.5rem 0;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.detail-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.detail-content {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-image-container {
+    flex-shrink: 0;
+}
+
+.detail-image {
+    border-radius: 8px;
+    box-shadow: 0 2px 6px var(--shadow-color);
+    width: 100%;
+    height: auto;
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: fit-content;
+    flex-wrap: wrap;
+}
+
+.detail-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.detail-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--text-secondary);
+}
+
+.detail-description {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.detail-description h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+}
+
+.description-content {
+    line-height: 1.6;
+    color: var(--text-secondary);
+    white-space: pre-line;
+}
+
+.detail-listing {
+    margin-top: 1.5rem;
+}
+
+.detail-listing h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.detail-listing-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.listing-item {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.listing-item:hover {
+    background-color: var(--bg-light);
+}
+
+.listing-item-title {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.listing-item-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .detail-content {
+        flex-direction: column;
+    }
+
+    .detail-image-container {
+        max-width: 200px;
+        margin: 0 auto 1rem;
+    }
+}
+
+.error-message {
+    color: var(--danger-color);
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: rgba(var(--danger-rgb), 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .detail-actions {
+        flex-direction: column;
+    }
 }
