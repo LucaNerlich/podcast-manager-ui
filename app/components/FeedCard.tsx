@@ -66,7 +66,10 @@ export default function FeedCard({feed}: FeedCardProps) {
 
     const copyFeedUrl = async () => {
         try {
-            await navigator.clipboard.writeText(feed.url);
+            const feedUrl = feed.public
+                ? `https://podcasthub.org/api/feeds/slug/${feed.slug}`
+                : `https://podcasthub.org/api/feeds/slug/${feed.slug}/token/${user?.token}`
+            await navigator.clipboard.writeText(feedUrl);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {

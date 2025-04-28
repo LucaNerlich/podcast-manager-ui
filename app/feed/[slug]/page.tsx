@@ -20,8 +20,6 @@ export default async function FeedPage({params}: { params: { slug: string } }) {
             );
         }
 
-        console.log("feed", feed);
-
         const feedUrl = feed.public
             ? `https://podcasthub.org/api/feeds/slug/${slug}`
             : `https://podcasthub.org/api/feeds/slug/${slug}/token/${auth.user?.token}`
