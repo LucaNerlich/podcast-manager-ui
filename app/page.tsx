@@ -28,6 +28,7 @@ async function getPublicFeedData() {
     try {
         // Fetch public feeds
         const publicFeedsData = await getPublicFeeds();
+        console.log("publicFeedsData", publicFeedsData);
 
         // Create arrays for the Promise.all calls
         const publicFeedPromises = publicFeedsData.map(feed =>
