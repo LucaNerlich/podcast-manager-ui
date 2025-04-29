@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import {useAuth} from '../context/AuthContext';
 import {useRouter} from 'next/navigation';
+import styles from './Header.module.css';
 
 export default function Header() {
     const {user, logout} = useAuth();
@@ -15,17 +16,17 @@ export default function Header() {
     };
 
     return (
-        <div className="header container">
-            <div className="logo">
+        <div className={`${styles.header} container`}>
+            <div className={styles.logo}>
                 <Link href="/">
                     <h1>Podcast Manager UI</h1>
                 </Link>
             </div>
 
-            <nav>
+            <nav className={styles.nav}>
                 {user ? (
-                    <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
-                        <span>Willkommen, {user.username}</span>
+                    <div className={styles.userInfo}>
+                        <span className={styles.username}>Willkommen, {user.username}</span>
                         <button onClick={handleLogout} className="btn btn-secondary">
                             Logout
                         </button>

@@ -115,6 +115,7 @@ export async function GET(
         }
 
         // Return the processed feed data
+        // if cors is needed: https://github.com/vercel/next.js/discussions/47933
         return NextResponse.json({
             title,
             description,

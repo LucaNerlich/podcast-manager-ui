@@ -38,6 +38,7 @@ export default function PrivateFeedsSection({publicSlugs}: PrivateFeedsSectionPr
             setError(null);
 
             const privateFeedsData = await getPrivateFeeds(jwt!);
+            console.log("privateFeedsData", privateFeedsData);
 
             // Create private feed promises array
             const privateFeedPromises = privateFeedsData.map(feed =>

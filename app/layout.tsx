@@ -1,7 +1,6 @@
 import React from 'react';
 import type {Metadata} from 'next';
 import './globals.css';
-import './styles.css';
 import Footer from '@/app/components/Footer';
 import Header from '@/app/components/Header';
 import {AuthProvider} from './context/AuthContext';
