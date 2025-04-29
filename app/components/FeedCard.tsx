@@ -5,6 +5,7 @@ import {Episode, Feed, getEpisodeDownloadUrl} from '../utils/api';
 import {useAuth} from '../context/AuthContext';
 import Image from "next/image";
 import Link from "next/link";
+import styles from '../page.module.css';
 
 interface FeedCardProps {
     feed: Feed;
@@ -84,7 +85,7 @@ export default function FeedCard({feed}: FeedCardProps) {
     };
 
     return (
-        <div className="card feed-card">
+        <div className={styles.card}>
             <div className="feed-header">
                 {hasValidCover && (
                     <div className="feed-avatar">

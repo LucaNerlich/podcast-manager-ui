@@ -9,7 +9,8 @@
     margin-top: 1rem;
 }
 
-.app_card {
+/* Unified card style for both mini apps and feed cards */
+.card {
     display: block;
     padding: 1.5rem;
     background: white;
@@ -17,12 +18,10 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     text-decoration: none;
     color: inherit;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.app_card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.app_card {
+    composes: card;
 }
 
 .app_icon {

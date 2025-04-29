@@ -17,6 +17,16 @@
     padding: 20px;
 }
 
+.container > section {
+    margin-bottom: 2rem;
+}
+
+.container > section > h2 {
+    margin-bottom: 1rem;
+    letter-spacing: 0.025rem;
+    font-size: xx-large;
+}
+
 .btn {
     align-items: center;
     border-radius: var(--border-radius);

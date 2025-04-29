@@ -47,11 +47,6 @@ a {
 /* Feed Card Enhancements */
 .feed-card {
     margin-bottom: 1.5rem;
-    transition: box-shadow 0.3s ease;
-}
-
-.feed-card:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .feed-info-full {

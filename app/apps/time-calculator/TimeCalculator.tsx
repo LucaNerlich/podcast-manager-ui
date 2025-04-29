@@ -1,6 +1,8 @@
 'use client';
 
-import React, {useActionState, useState} from 'react';
+import React, {useState} from 'react';
+import {useFormState} from 'react-dom';
+import styles from '../../page.module.css';
 
 type TimeUnit = 'seconds' | 'milliseconds' | 'minutes' | 'hours';
 
@@ -86,7 +88,7 @@ function millisecondsToTime(milliseconds: number) {
 }
 
 export default function TimeCalculator() {
-    const [state, formAction] = useActionState(calculateTime, initialState);
+    const [state, formAction] = useFormState(calculateTime, initialState);
     const [milliseconds, setMilliseconds] = useState<string>('');
     const [msResult, setMsResult] = useState<string | null>(null);
 
@@ -105,7 +107,7 @@ export default function TimeCalculator() {
 
     return (
         <div className="time-calculator">
-            <div className="calculator-section">
+            <div className={styles.card + " calculator-section"}>
                 <h2>Time to Unit Converter</h2>
                 <form action={formAction} className="time-form">
                     <div className="input-group">
@@ -167,7 +169,7 @@ export default function TimeCalculator() {
                 {state.result && <div className="result">{state.result}</div>}
             </div>
 
-            <div className="calculator-section">
+            <div className={styles.card + " calculator-section"}>
                 <h2>Milliseconds to Time</h2>
                 <form onSubmit={handleMillisecondsConversion} className="ms-form">
                     <div className="input-group">
@@ -197,10 +199,7 @@ export default function TimeCalculator() {
                 }
 
                 .calculator-section {
-                    background: white;
-                    padding: 1.5rem;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 0;
                 }
 
                 h2 {
