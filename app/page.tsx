@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {Feed, getFeedFromApi, getPrivateFeeds, getPublicFeeds} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
+import styles from './page.module.css';
 
 // Mini-app interface for type safety
 interface MiniApp {
@@ -106,7 +107,7 @@ export default function HomePage() {
     return (
         <div className="container">
             {error && (
-                <div style={{color: 'var(--danger-color)', marginBottom: '1rem'}}>
+                <div className={styles.danger_message}>
                     {error}
                 </div>
             )}
@@ -125,7 +126,7 @@ export default function HomePage() {
             </section>
 
             {jwt && (
-                <section style={{marginTop: '2rem'}}>
+                <section className={styles.section_margin}>
                     <h2>Private Feeds</h2>
                     {privateFeeds.length > 0 ? (
                         <div className="feed-grid">
@@ -140,7 +141,7 @@ export default function HomePage() {
             )}
 
             {!jwt && (
-                <section style={{marginTop: '2rem'}}>
+                <section className={styles.section_margin}>
                     <div>
                         <h2>Access Private Feeds</h2>
                         <p>Please log in to access your private feeds.</p>
@@ -154,69 +155,18 @@ export default function HomePage() {
                 </section>
             )}
 
-            <section className="app-section">
+            <section className={styles.app_section}>
                 <h2>Mini Apps</h2>
-                <div className="app-grid">
+                <div className={styles.app_grid}>
                     {miniApps.map((app) => (
-                        <Link key={app.path} href={app.path} className="app-card">
-                            <div className="app-icon">{app.icon}</div>
+                        <Link key={app.path} href={app.path} className={styles.app_card}>
+                            <div className={styles.app_icon}>{app.icon}</div>
                             <h3>{app.title}</h3>
                             <p>{app.description}</p>
                         </Link>
                     ))}
                 </div>
             </section>
-
-            <style jsx>{`
-                .app-section {
-                    margin-bottom: 2rem;
-                }
-
-                .app-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                    gap: 1.5rem;
-                    margin-top: 1rem;
-                }
-
-                .app-card {
-                    display: block;
-                    padding: 1.5rem;
-                    background: white;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                    text-decoration: none;
-                    color: inherit;
-                    transition: transform 0.2s, box-shadow 0.2s;
-                }
-
-                .app-card:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                .app-icon {
-                    font-size: 2rem;
-                    margin-bottom: 0.75rem;
-                }
-
-                .app-card h3 {
-                    margin: 0 0 0.5rem 0;
-                    color: #333;
-                }
-
-                .app-card p {
-                    margin: 0;
-                    color: #666;
-                    font-size: 0.9rem;
-                }
-
-                @media (max-width: 600px) {
-                    .app-grid {
-                        grid-template-columns: 1fr;
-                    }
-                }
-            `}</style>
         </div>
     );
 }

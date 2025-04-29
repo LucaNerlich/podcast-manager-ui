@@ -1,0 +1,57 @@
+.app_section {
+    margin-bottom: 2rem;
+}
+
+.app_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.app_card {
+    display: block;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.app_card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.app_icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.app_card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.app_card p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    .app_grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.danger_message {
+    color: var(--danger-color);
+    margin-bottom: 1rem;
+}
+
+.section_margin {
+    margin-top: 2rem;
+} 
