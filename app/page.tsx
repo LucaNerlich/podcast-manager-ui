@@ -2,9 +2,29 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
+import Link from 'next/link';
 import {Feed, getFeedFromApi, getPrivateFeeds, getPublicFeeds} from './utils/api';
 import {useAuth} from './context/AuthContext';
 import FeedCard from './components/FeedCard';
+
+// Mini-app interface for type safety
+interface MiniApp {
+    title: string;
+    description: string;
+    path: string;
+    icon?: string;
+}
+
+// List of available mini apps
+const miniApps: MiniApp[] = [
+    {
+        title: 'Time Calculator',
+        description: 'Convert between different time units and formats',
+        path: '/apps/time-calculator',
+        icon: '⏱️',
+    },
+    // More apps will be added here in the future
+];
 
 export default function HomePage() {
     const [publicFeeds, setPublicFeeds] = useState<Feed[]>([]);
@@ -133,6 +153,70 @@ export default function HomePage() {
                     </div>
                 </section>
             )}
+
+            <section className="app-section">
+                <h2>Mini Apps</h2>
+                <div className="app-grid">
+                    {miniApps.map((app) => (
+                        <Link key={app.path} href={app.path} className="app-card">
+                            <div className="app-icon">{app.icon}</div>
+                            <h3>{app.title}</h3>
+                            <p>{app.description}</p>
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+            <style jsx>{`
+                .app-section {
+                    margin-bottom: 2rem;
+                }
+
+                .app-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                    gap: 1.5rem;
+                    margin-top: 1rem;
+                }
+
+                .app-card {
+                    display: block;
+                    padding: 1.5rem;
+                    background: white;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    text-decoration: none;
+                    color: inherit;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                }
+
+                .app-card:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                .app-icon {
+                    font-size: 2rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                .app-card h3 {
+                    margin: 0 0 0.5rem 0;
+                    color: #333;
+                }
+
+                .app-card p {
+                    margin: 0;
+                    color: #666;
+                    font-size: 0.9rem;
+                }
+
+                @media (max-width: 600px) {
+                    .app-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
