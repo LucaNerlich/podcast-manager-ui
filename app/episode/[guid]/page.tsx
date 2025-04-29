@@ -19,7 +19,7 @@ function formatDuration(seconds: number) {
 }
 
 export default async function EpisodePage({params}: { params: { guid: string } }) {
-    const {guid} = params;
+    const {guid} = await params;
     const auth = await getServerSideAuth();
 
     try {
