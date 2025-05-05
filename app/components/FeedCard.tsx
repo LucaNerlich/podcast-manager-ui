@@ -105,7 +105,7 @@ export default function FeedCard({feed}: FeedCardProps) {
                 </div>
             </div>
 
-            <p className="feed-description">{feed.description}</p>
+            {feed.description && <p className="feed-description">{feed.description}</p>}
 
             <div className="button-group">
                 <button

@@ -47,12 +47,14 @@ export default function DetailCard({
                     </div>
                 </div>
 
-                <div className="detail-description">
-                    <h2>Beschreibung</h2>
-                    <div className="description-content">
-                        {description}
-                    </div>
-                </div>
+                {description &&
+                  <div className="detail-description">
+                      <h2>Beschreibung</h2>
+                      <div className="description-content">
+                          {description}
+                      </div>
+                  </div>
+                }
             </div>
 
             {listingTitle && listingItems && (
