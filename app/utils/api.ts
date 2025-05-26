@@ -65,6 +65,7 @@ export const getPrivateFeeds = async (token: string): Promise<Feed[]> => {
         headers: {
             Authorization: `Bearer ${token}`,
         },
+        cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -108,7 +109,7 @@ export const getEpisodeByGuid = async (guid: string, token?: string): Promise<Ep
         ? `${API_URL}/episodes/${guid}?token=${token}`
         : `${API_URL}/episodes/${guid}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: 'no-store' });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch episode with GUID: ${guid}`);

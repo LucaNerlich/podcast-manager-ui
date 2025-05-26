@@ -68,27 +68,49 @@ a {
 .btn {
     align-items: center;
     border-radius: var(--border-radius);
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
+    justify-content: center;
     font-size: 0.95rem;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.5;
-    padding: 6px 14px;
+    padding: 0.5rem 1rem;
     text-align: center;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, transform 0.15s ease-in-out;
     user-select: none;
     vertical-align: middle;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0px);
 }
 
 .btn-primary {
     background-color: var(--primary-color);
     color: white;
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+    border-color: color-mix(in srgb, var(--primary-color) 85%, black);
 }
 
 .btn-secondary {
     background-color: var(--dark-gray);
     color: white;
+    border-color: var(--dark-gray);
+}
+
+.btn-secondary:hover {
+    background-color: color-mix(in srgb, var(--dark-gray) 85%, black);
+    border-color: color-mix(in srgb, var(--dark-gray) 85%, black);
 }
 
 .btn-danger {
@@ -140,9 +162,16 @@ a {
     font-size: 1rem;
     line-height: 1.5;
     color: var(--text-primary);
-    background-color: white;
-    border: 1px solid var(--light-gray);
+    background-color: var(--bg-card, white);
+    border: 1px solid var(--border-color, var(--light-gray));
     border-radius: var(--border-radius);
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb),.25);
 }
 
 .login-form {
@@ -163,48 +192,22 @@ a {
     gap: 20px;
 }
 
-.feed-card {
-    margin-bottom: 1.5rem;
-}
+/* Styles from .feed-card down to .page-info are now */
+/* primarily handled by FeedCard.module.css. */
+/* Removing them here to avoid conflicts and redundancy. */
 
-.feed-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 5px 0;
-    word-break: break-word;
-}
-
-.feed-description {
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-}
-
-.feed-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.feed-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.feed-info-full {
-    width: 100%;
-}
-
+/* Keeping .feed-title-link and its hover effect if it's used outside FeedCard or as a general utility */
+/* However, the inner .feed-title might be too generic or handled by components */
 .feed-title-link {
     text-decoration: none;
     color: inherit;
 }
 
-.feed-title-link:hover .feed-title {
+.feed-title-link:hover .feed-title { /* This .feed-title class might need to be namespaced if kept */
     color: var(--primary-color);
 }
 
+/* .feed-link styles can remain if used as general utility links */
 .feed-link {
     color: var(--primary-color);
     font-weight: 500;
@@ -215,251 +218,16 @@ a {
     text-decoration: underline;
 }
 
-.feed-avatar {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 15px;
-    flex-shrink: 0;
-    position: relative;
-    background-color: var(--light-gray);
-    border: 2px solid var(--primary-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+/* Removed old styles for .feed-card, .feed-header, .feed-avatar, .feed-info, .feed-info-full, */
+/* .feed-description, .button-group, .avatar-img (if specific to old feed card), */
+/* .episode-list, .episode-list.empty, .episode-item, .episode-item:hover, */
+/* .episode-header, .episode-avatar, .episode-info, .episode-info-full, .episode-title, */
+/* .episode-metadata, .episode-date, .episode-duration, .episode-description, */
+/* .metadata-item, .read-more-btn, .episode-actions, .episode-actions-row, */
+/* .episode-row-btn, .details-btn, .episode-btn, */
+/* .episode-controls, .search-filter-container, .search-input, .year-filter, */
+/* .episode-count, .pagination, .pagination-btn, .page-info */
 
-.avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.button-group {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.button-group .btn {
-    flex: 1;
-}
-
-.button-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-/* Episode Components */
-.episode-list {
-    margin-top: 1rem;
-}
-
-.episode-list.empty {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-secondary);
-}
-
-.episode-item {
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    background-color: var(--bg-card);
-}
-
-.episode-item:hover {
-    background-color: var(--bg-light);
-}
-
-.episode-header {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-}
-
-.episode-avatar {
-    position: relative;
-    width: 54px;
-    height: 54px;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-    margin-right: 15px;
-    background-color: var(--light-gray);
-    border: 2px solid var(--secondary-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.episode-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.episode-info-full {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-}
-
-.episode-title {
-    margin: 0 0 0.2rem 0;
-    font-size: 0.95rem;
-    font-weight: 600;
-}
-
-.episode-metadata {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-}
-
-.episode-duration {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.episode-description {
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-    font-size: 0.85rem;
-    padding: 0 0.25rem;
-}
-
-.metadata-item {
-    display: flex;
-    align-items: center;
-}
-
-.read-more-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.read-more-btn:hover {
-    text-decoration: underline;
-}
-
-.episode-actions {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-}
-
-.episode-actions-row {
-    display: flex;
-    gap: 0.5rem;
-    margin: 1.2rem 0 0.5rem 0;
-    flex-wrap: wrap;
-}
-
-.episode-row-btn {
-    font-size: 0.85rem;
-    padding: 0.25rem 0.7rem;
-    min-height: 28px;
-    max-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    flex: 1;
-    white-space: nowrap;
-}
-
-.episode-row-btn svg {
-    margin-right: 0.3em;
-}
-
-.details-btn {
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-}
-
-.episode-btn {
-    margin-right: 0.5rem;
-}
-
-/* Episode Filtering and Controls */
-.episode-controls {
-    margin: 1rem 0;
-    padding: 1rem;
-    background-color: var(--bg-light);
-    border-radius: 8px;
-}
-
-.search-filter-container {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.search-input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-}
-
-.year-filter {
-    padding: 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background-color: white;
-}
-
-.episode-count {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-/* Pagination */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.pagination-btn {
-    background: none;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.pagination-btn:hover:not(:disabled) {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-
-.pagination-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.page-info {
-    margin: 0 0.5rem;
-}
-
-/* Detail Card Styles */
 .detail-page {
     padding: 1.5rem 0;
     max-width: 1000px;

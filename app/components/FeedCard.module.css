@@ -1,0 +1,319 @@
+/* app/components/FeedCard.module.css */
+.cardBase {
+    display: block;
+    padding: 1.5rem;
+    background: var(--bg-card, #ffffff); /* Use CSS var, fallback */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color, rgba(0, 0, 0, 0.08));
+    text-decoration: none;
+    color: var(--text-primary, inherit);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.cardBase:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px var(--shadow-color, rgba(0, 0, 0, 0.12));
+}
+
+.feedHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.feedAvatar {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: var(--bg-light, #f0f0f0);
+}
+
+.avatarImg {
+    object-fit: cover;
+}
+
+.feedInfo {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.feedInfoFull {
+    composes: feedInfo;
+    margin-left: 0;
+}
+
+.feedTitleLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.feedTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary, #1a202c);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.feedTitleLink:hover .feedTitle {
+    color: var(--primary-color, #3182ce);
+}
+
+.feedDescription {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #4a5568);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.buttonGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+/* Button styles specific to FeedCard, composing global .btn if possible or defining locally */
+.btn {
+    /* These are overrides or specific additions for FeedCard buttons */
+    /* Global .btn should provide the very base (border:none, cursor, base transition etc) */
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px; /* Overriding global var(--border-radius) if different */
+    font-weight: 500; /* Overriding global font-weight if different */
+    transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease; 
+    text-decoration: none;
+    display: inline-flex; /* Good for buttons with icons + text */
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4; /* Adjust line height */
+}
+
+.btnPrimary {
+    composes: btn; /* This assumes a global .btn class is available or defined in globals.css */
+    background-color: var(--primary-color, #3182ce);
+    color: white; /* Assuming primary buttons always have white text */
+    border: 1px solid transparent; /* Ensure consistent box model */
+}
+
+.btnPrimary:hover {
+    background-color: color-mix(in srgb, var(--primary-color, #3182ce) 85%, black);
+    transform: translateY(-1px);
+}
+
+.btnSecondary {
+    composes: btn;
+    background-color: var(--bg-light, #edf2f7);
+    color: var(--text-primary, #2d3748);
+    border: 1px solid var(--border-color, #cbd5e0);
+}
+
+.btnSecondary:hover {
+    background-color: color-mix(in srgb, var(--bg-light, #edf2f7) 85%, #0000001a ); /* Darken slightly */
+    border-color: color-mix(in srgb, var(--border-color, #cbd5e0) 85%, #0000001a);
+    transform: translateY(-1px);
+}
+
+.episodeControls {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.searchFilterContainer {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.searchInput,
+.yearFilter {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-color, #cbd5e0);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    flex-grow: 1;
+    background-color: var(--bg-card, #fff);
+    color: var(--text-primary, #333);
+}
+
+.yearFilter {
+    flex-grow: 0;
+    min-width: 120px;
+}
+
+.episodeCount {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #718096);
+    margin-bottom: 1rem;
+}
+
+.episodeList {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Space between episode items */
+}
+
+/* Removed .episodeItemBase, styles moved to .episodeItemContainer */
+
+.episodeItemContainer { 
+    padding: 1rem;
+    background-color: var(--bg-light, #f9fafb);
+    border-radius: 8px;
+    /* margin-bottom: 1rem; /* Handled by gap in .episodeList */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color, #e9ecef);
+}
+
+/* Removed :last-child margin-bottom as gap is used */
+
+.episodeHeader {
+    display: flex;
+    /* justify-content: space-between; /* Let content flow naturally */
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem; /* Space between header and description/actions */
+}
+
+.episodeCover {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    /* margin-right: 0.75rem; /* Replaced by gap on .episodeHeader */
+    background-color: var(--bg-light, #e2e8f0);
+}
+
+.episodeMainContent {
+    flex-grow: 1;
+    min-width: 0; /* Prevent overflow for long titles */
+}
+
+.episodeTitleLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.episodeTitle {
+    font-size: 1rem;
+    font-weight: 600; /* Slightly bolder */
+    color: var(--text-primary, #2d3748);
+    margin:0;
+    line-height: 1.3;
+}
+
+.episodeTitleLink:hover .episodeTitle {
+    color: var(--primary-color, #3182ce);
+}
+
+.episodeMeta {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #718096);
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 0.25rem 0.75rem; /* row and column gap */
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+.episodeDescription {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #4a5568);
+    line-height: 1.5;
+    max-height: 4.5em; /* approx 3 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    margin-bottom: 0.75rem; /* Space before actions */
+}
+
+.expandedDescription {
+    max-height: none;
+    -webkit-line-clamp: unset;
+}
+
+.episodeActions {
+    display: flex;
+    flex-wrap: wrap; /* Allow actions to wrap */
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    align-items: center;
+}
+
+.actionButton { /* Base for small action buttons within episodes */
+    composes: btn; /* Inherit base .btn from this file */
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    /* Specific styling for action buttons, can override .btn props if needed */
+}
+
+.downloadButton {
+    composes: actionButton btnSecondary; /* Compose with .btnSecondary for its colors/border */
+}
+
+.copyButton {
+    composes: actionButton btnSecondary;
+}
+
+.expandButton {
+    /* composes: actionButton; /* Optionally compose if it needs similar padding/font-size */
+    background: none;
+    border: none;
+    color: var(--primary-color, #3182ce);
+    cursor: pointer;
+    padding: 0.25rem; /* Keep small padding for click area */
+    font-size: 0.8rem;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.expandButton:hover {
+    text-decoration: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.paginationBtn {
+    composes: btnSecondary; /* Use the .btnSecondary defined in this file */
+    padding: 0.5rem 0.8rem; /* Specific padding for pagination */
+    font-size: 0.9rem;
+}
+
+.paginationBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--bg-light, #edf2f7); /* Ensure disabled bg is consistent */
+    border-color: var(--border-color, #cbd5e0); /* Ensure disabled border is consistent */
+    color: var(--text-secondary, #718096); /* Muted text for disabled */
+    transform: none; /* No hover transform when disabled */
+}
+
+.pageInfo {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #4a5568);
+}
+
+.emptyList {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary, #718096);
+} 

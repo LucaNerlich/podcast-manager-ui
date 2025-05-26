@@ -5,7 +5,7 @@ import {Episode, Feed, getEpisodeDownloadUrl} from '../utils/api';
 import {useAuth} from '../context/AuthContext';
 import Image from "next/image";
 import Link from "next/link";
-import styles from '../page.module.css';
+import styles from './FeedCard.module.css';
 
 interface FeedCardProps {
     feed: Feed;
@@ -85,63 +85,63 @@ export default function FeedCard({feed}: FeedCardProps) {
     };
 
     return (
-        <div className={styles.card}>
-            <div className="feed-header">
+        <div className={styles.cardBase}>
+            <div className={styles.feedHeader}>
                 {hasValidCover && (
-                    <div className="feed-avatar">
+                    <div className={styles.feedAvatar}>
                         <Image
                             src={feed.cover!}
                             alt={feed.title}
                             fill
-                            className="avatar-img"
+                            className={styles.avatarImg}
                         />
                     </div>
                 )}
 
-                <div className={!hasValidCover ? "feed-info-full" : "feed-info"}>
-                    <Link href={`/feed/${feed.slug}`} className="feed-title-link">
-                        <h3 className="feed-title">{feed.title}</h3>
+                <div className={hasValidCover ? styles.feedInfo : styles.feedInfoFull}>
+                    <Link href={`/feed/${feed.slug}`} className={styles.feedTitleLink}>
+                        <h3 className={styles.feedTitle}>{feed.title}</h3>
                     </Link>
                 </div>
             </div>
 
-            {feed.description && <p className="feed-description">{feed.description}</p>}
+            {feed.description && <p className={styles.feedDescription}>{feed.description}</p>}
 
-            <div className="button-group">
+            <div className={styles.buttonGroup}>
                 <button
                     onClick={copyFeedUrl}
-                    className="btn btn-primary"
+                    className={styles.btnPrimary}
                 >
                     {copied ? '✓ Feed URL kopiert!' : 'Feed URL kopieren'}
                 </button>
 
                 <button
-                    className="btn btn-primary"
+                    className={styles.btnPrimary}
                     onClick={() => setShowEpisodes(!showEpisodes)}
                 >
                     {showEpisodes ? 'Episodes verstecken' : 'Episoden anzeigen'}
                 </button>
 
-                <Link href={`/feed/${feed.slug}`} className="btn btn-secondary">
+                <Link href={`/feed/${feed.slug}`} className={styles.btnSecondary}>
                     Feed Details
                 </Link>
             </div>
 
             {showEpisodes && feed.episodes && (
-                <div className="episode-controls">
-                    <div className="search-filter-container">
+                <div className={styles.episodeControls}>
+                    <div className={styles.searchFilterContainer}>
                         <input
                             type="text"
                             placeholder="Search episodes..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
+                            className={styles.searchInput}
                         />
 
                         <select
                             value={yearFilter}
                             onChange={(e) => setYearFilter(e.target.value)}
-                            className="year-filter"
+                            className={styles.yearFilter}
                         >
                             <option value="">All Years</option>
                             {availableYears.map(year => (
@@ -150,7 +150,7 @@ export default function FeedCard({feed}: FeedCardProps) {
                         </select>
                     </div>
 
-                    <div className="episode-count">
+                    <div className={styles.episodeCount}>
                         <span>{filteredEpisodes.length} episodes</span>
                         {filteredEpisodes.length > 0 && (
                             <span> (showing {(currentPage - 1) * EPISODES_PER_PAGE + 1}-
@@ -163,7 +163,7 @@ export default function FeedCard({feed}: FeedCardProps) {
             )}
 
             {showEpisodes && paginatedEpisodes.length > 0 && (
-                <div className="episode-list">
+                <div className={styles.episodeList}>
                     {paginatedEpisodes.map((episode) => (
                         <EpisodeItem
                             key={episode.guid}
@@ -174,33 +174,33 @@ export default function FeedCard({feed}: FeedCardProps) {
 
                     {/* Pagination controls */}
                     {totalPages > 1 && (
-                        <div className="pagination">
+                        <div className={styles.pagination}>
                             <button
-                                className="pagination-btn"
+                                className={styles.paginationBtn}
                                 disabled={currentPage === 1}
                                 onClick={() => handlePageChange(1)}
                             >
                                 &laquo;
                             </button>
                             <button
-                                className="pagination-btn"
+                                className={styles.paginationBtn}
                                 disabled={currentPage === 1}
                                 onClick={() => handlePageChange(currentPage - 1)}
                             >
                                 &lsaquo;
                             </button>
 
-                            <span className="page-info">{currentPage} / {totalPages}</span>
+                            <span className={styles.pageInfo}>{currentPage} / {totalPages}</span>
 
                             <button
-                                className="pagination-btn"
+                                className={styles.paginationBtn}
                                 disabled={currentPage === totalPages}
                                 onClick={() => handlePageChange(currentPage + 1)}
                             >
                                 &rsaquo;
                             </button>
                             <button
-                                className="pagination-btn"
+                                className={styles.paginationBtn}
                                 disabled={currentPage === totalPages}
                                 onClick={() => handlePageChange(totalPages)}
                             >
@@ -212,7 +212,7 @@ export default function FeedCard({feed}: FeedCardProps) {
             )}
 
             {showEpisodes && paginatedEpisodes.length === 0 && (
-                <div className="episode-list empty">
+                <div className={`${styles.episodeList} ${styles.emptyList}`}>
                     <p>No episodes match your search.</p>
                 </div>
             )}
@@ -270,25 +270,25 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
     }, [episode.duration]);
 
     return (
-        <div className="episode-item">
-            <div className="episode-header">
+        <div className={styles.episodeItemContainer}>
+            <div className={styles.episodeHeader}>
                 {episode?.cover?.url && (
-                    <div className="episode-avatar">
+                    <div className={styles.episodeCover}>
                         <Image
                             src={episode?.cover?.url}
                             alt={episode.title}
                             fill
-                            className="avatar-img"
+                            className={styles.avatarImg}
                         />
                     </div>
                 )}
 
-                <div className={episode?.cover?.url ? "episode-info-full" : "episode-info"}>
-                    <h5 className="episode-title">{episode.title}</h5>
-                    <div className="episode-metadata">
-                        <span className="episode-date">{formattedDate}</span>
+                <div className={episode?.cover?.url ? styles.episodeInfoFull : styles.episodeInfo}>
+                    <h5 className={styles.episodeTitle}>{episode.title}</h5>
+                    <div className={styles.episodeMeta}>
+                        <span className={styles.episodeDate}>{formattedDate}</span>
                         {formattedDuration && (
-                            <span className="episode-duration">
+                            <span className={styles.episodeDuration}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" strokeWidth="2">
                                     <circle cx="12" cy="12" r="10"></circle>
@@ -303,11 +303,11 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
             </div>
 
             {displayDescription && (
-                <div className="episode-description">
+                <div className={`${styles.episodeDescription} ${expanded ? styles.expandedDescription : ''}`}>
                     <p>{displayDescription}</p>
                     {isLongDescription && (
                         <button
-                            className="read-more-btn"
+                            className={styles.expandButton}
                             onClick={() => setExpanded(!expanded)}
                         >
                             {expanded ? 'Less' : 'More'}
@@ -316,10 +316,10 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
                 </div>
             )}
 
-            <div className="episode-actions-row">
+            <div className={styles.episodeActions}>
                 <Link
                     href={downloadUrl}
-                    className="btn btn-primary episode-row-btn"
+                    className={styles.downloadButton}
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -332,7 +332,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
 
                 <button
                     onClick={copyDownloadUrl}
-                    className="btn btn-secondary episode-row-btn"
+                    className={styles.copyButton}
                 >
                     {copied ? (
                         <>
@@ -356,7 +356,7 @@ function EpisodeItem({episode, userToken}: EpisodeItemProps) {
 
                 <Link
                     href={`/episode/${episode.guid}`}
-                    className="btn btn-outline episode-row-btn details-btn"
+                    className={styles.detailsButton}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" strokeWidth="2">

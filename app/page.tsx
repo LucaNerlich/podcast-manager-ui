@@ -82,7 +82,10 @@ export default async function HomePage() {
             </section>
 
             {/* Client component that handles private feeds */}
-            <PrivateFeedsSection publicSlugs={publicSlugs}/>
+            <section>
+                <h2>Meine Feeds</h2>
+                <PrivateFeedsSection publicSlugs={publicSlugs}/>
+            </section>
         </div>
     );
 }

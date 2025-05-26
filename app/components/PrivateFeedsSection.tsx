@@ -93,7 +93,7 @@ export default function PrivateFeedsSection({publicSlugs}: PrivateFeedsSectionPr
             {privateFeeds.length > 0 ? (
                 <div className="feed-grid">
                     {privateFeeds.map((feed) => (
-                        <FeedCard key={crypto.randomUUID()} feed={feed}/>
+                        <FeedCard key={feed.slug} feed={feed}/>
                     ))}
                 </div>
             ) : (
