@@ -66,7 +66,12 @@ export default function PrivateFeedsSection({publicSlugs}: PrivateFeedsSectionPr
     };
 
     if (loading) {
-        return <p>Loading private feeds...</p>;
+        return (
+            <div className="loading-container">
+                <div className="spinner"></div>
+                <p>Loading private feeds...</p>
+            </div>
+        );
     }
 
     if (!jwt) {
@@ -97,7 +102,10 @@ export default function PrivateFeedsSection({publicSlugs}: PrivateFeedsSectionPr
                     ))}
                 </div>
             ) : (
-                <p>No private feeds available.</p>
+                <div className="no-items-enhanced">
+                    {/* Optional: Add an icon here later */}
+                    <p>No private feeds available.</p>
+                </div>
             )}
         </section>
     );

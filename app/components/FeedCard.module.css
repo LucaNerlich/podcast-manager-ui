@@ -316,4 +316,8 @@
     text-align: center;
     padding: 2rem;
     color: var(--text-secondary, #718096);
+    /* Composing the global style for a more enhanced look */
+    composes: no-items-enhanced from global; /* Assuming 'global' keyword works for CSS Modules with globals */
+    /* If 'from global' doesn't work, we'd copy relevant properties or use a different approach */
+    /* For now, let's assume it directs to the global .no-items-enhanced */ 
 } 

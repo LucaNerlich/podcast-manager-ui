@@ -1,3 +1,12 @@
-.footer a {
-    text-decoration: underline;
+.footer {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color, #ddd);
+    padding: 1.5rem 0;
+    text-align: center;
+    color: var(--text-secondary, #666);
+    font-size: 0.9rem;
+}
+
+.footer p {
+    margin: 0;
 }
