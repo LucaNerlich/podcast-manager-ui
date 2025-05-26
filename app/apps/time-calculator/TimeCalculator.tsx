@@ -2,7 +2,8 @@
 
 import React, {useState} from 'react';
 import {useFormState} from 'react-dom';
-import styles from '../../page.module.css';
+import pageStyles from '../../page.module.css'; // For styles.card
+import styles from './time-calculator.module.css'; // Specific styles for this app
 
 type TimeUnit = 'seconds' | 'milliseconds' | 'minutes' | 'hours';
 
@@ -42,47 +43,39 @@ function calculateTime(prevState: TimeState, formData: FormData): TimeState {
         };
     }
 
-    // Calculate total in seconds
     const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-
-    let result: string;
+    let resultValue: string;
     switch (outputUnit) {
         case 'milliseconds':
-            result = `${totalSeconds * 1000} milliseconds`;
+            resultValue = `${totalSeconds * 1000} milliseconds`;
             break;
         case 'seconds':
-            result = `${totalSeconds} seconds`;
+            resultValue = `${totalSeconds} seconds`;
             break;
         case 'minutes':
-            result = `${(totalSeconds / 60).toFixed(2)} minutes`;
+            resultValue = `${(totalSeconds / 60).toFixed(2)} minutes`;
             break;
         case 'hours':
-            result = `${(totalSeconds / 3600).toFixed(2)} hours`;
+            resultValue = `${(totalSeconds / 3600).toFixed(2)} hours`;
             break;
         default:
-            result = `${totalSeconds} seconds`;
+            resultValue = `${totalSeconds} seconds`;
     }
-
     return {
-        hours,
-        minutes,
-        seconds,
-        outputUnit,
-        result,
+        hours, minutes, seconds, outputUnit,
+        result: resultValue,
         error: null
     };
 }
 
-// Milliseconds to time conversion
 function millisecondsToTime(milliseconds: number) {
-    const seconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-
+    const secs = Math.floor(milliseconds / 1000);
+    const mins = Math.floor(secs / 60);
+    const hrs = Math.floor(mins / 60);
     return {
-        hours: hours,
-        minutes: minutes % 60,
-        seconds: seconds % 60,
+        hours: hrs,
+        minutes: mins % 60,
+        seconds: secs % 60,
         milliseconds: milliseconds % 1000
     };
 }
@@ -95,23 +88,21 @@ export default function TimeCalculator() {
     const handleMillisecondsConversion = (e: React.FormEvent) => {
         e.preventDefault();
         const ms = Number(milliseconds);
-
         if (isNaN(ms)) {
             setMsResult('Please enter a valid number');
             return;
         }
-
         const time = millisecondsToTime(ms);
         setMsResult(`${time.hours}h ${time.minutes}m ${time.seconds}s ${time.milliseconds}ms`);
     };
 
     return (
-        <div className="time-calculator">
-            <div className={styles.card + " calculator-section"}>
-                <h2>Time to Unit Converter</h2>
-                <form action={formAction} className="time-form">
-                    <div className="input-group">
-                        <label htmlFor="hours">Hours:</label>
+        <div className={styles.calculatorContainer}>
+            <div className={`${pageStyles.card} ${styles.calculatorSection}`}>
+                <h2 className={styles.title}>Time to Unit Converter</h2>
+                <form action={formAction} className={styles.form}>
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="hours" className={styles.label}>Hours:</label>
                         <input
                             type="number"
                             id="hours"
@@ -119,11 +110,11 @@ export default function TimeCalculator() {
                             min="0"
                             defaultValue={state.hours}
                             placeholder="0"
+                            className={styles.input}
                         />
                     </div>
-
-                    <div className="input-group">
-                        <label htmlFor="minutes">Minutes:</label>
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="minutes" className={styles.label}>Minutes:</label>
                         <input
                             type="number"
                             id="minutes"
@@ -132,11 +123,11 @@ export default function TimeCalculator() {
                             max="59"
                             defaultValue={state.minutes}
                             placeholder="0"
+                            className={styles.input}
                         />
                     </div>
-
-                    <div className="input-group">
-                        <label htmlFor="seconds">Seconds:</label>
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="seconds" className={styles.label}>Seconds:</label>
                         <input
                             type="number"
                             id="seconds"
@@ -145,15 +136,16 @@ export default function TimeCalculator() {
                             max="59"
                             defaultValue={state.seconds}
                             placeholder="0"
+                            className={styles.input}
                         />
                     </div>
-
-                    <div className="input-group">
-                        <label htmlFor="outputUnit">Convert to:</label>
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="outputUnit" className={styles.label}>Convert to:</label>
                         <select
                             id="outputUnit"
                             name="outputUnit"
                             defaultValue={state.outputUnit}
+                            className={styles.select}
                         >
                             <option value="seconds">Seconds</option>
                             <option value="milliseconds">Milliseconds</option>
@@ -161,124 +153,30 @@ export default function TimeCalculator() {
                             <option value="hours">Hours</option>
                         </select>
                     </div>
-
-                    <button type="submit" className="calculate-btn">Calculate</button>
+                    <button type="submit" className={styles.calculateBtn}>Calculate</button>
                 </form>
-
-                {state.error && <div className="error">{state.error}</div>}
-                {state.result && <div className="result">{state.result}</div>}
+                {state.error && <div className={styles.errorMsg}>{state.error}</div>}
+                {state.result && <div className={styles.resultMsg}>{state.result}</div>}
             </div>
 
-            <div className={styles.card + " calculator-section"}>
-                <h2>Milliseconds to Time</h2>
-                <form onSubmit={handleMillisecondsConversion} className="ms-form">
-                    <div className="input-group">
-                        <label htmlFor="ms-input">Milliseconds:</label>
+            <div className={`${pageStyles.card} ${styles.calculatorSection}`}>
+                <h2 className={styles.title}>Milliseconds to Time</h2>
+                <form onSubmit={handleMillisecondsConversion} className={styles.form}>
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="ms-input" className={styles.label}>Milliseconds:</label>
                         <input
                             type="number"
                             id="ms-input"
                             value={milliseconds}
                             onChange={(e) => setMilliseconds(e.target.value)}
                             placeholder="Enter milliseconds"
+                            className={styles.input}
                         />
                     </div>
-
-                    <button type="submit" className="calculate-btn">Convert</button>
+                    <button type="submit" className={styles.calculateBtn}>Convert</button>
                 </form>
-
-                {msResult && <div className="result">{msResult}</div>}
+                {msResult && <div className={styles.resultMsg}>{msResult}</div>}
             </div>
-
-            <style jsx>{`
-                .time-calculator {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 2rem;
-                    max-width: 100%;
-                    padding: 1rem;
-                }
-
-                .calculator-section {
-                    margin-bottom: 0;
-                }
-
-                h2 {
-                    margin-top: 0;
-                    margin-bottom: 1.5rem;
-                    font-size: 1.5rem;
-                }
-
-                .time-form, .ms-form {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                }
-
-                .input-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                }
-
-                label {
-                    font-weight: 500;
-                }
-
-                input, select {
-                    padding: 0.75rem;
-                    border: 1px solid #ddd;
-                    border-radius: 4px;
-                    font-size: 1rem;
-                }
-
-                .calculate-btn {
-                    margin-top: 1rem;
-                    padding: 0.75rem;
-                    background-color: #0070f3;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    font-size: 1rem;
-                    cursor: pointer;
-                    font-weight: 500;
-                }
-
-                .calculate-btn:hover {
-                    background-color: #0060df;
-                }
-
-                .error {
-                    color: #e00;
-                    margin-top: 1rem;
-                }
-
-                .result {
-                    margin-top: 1rem;
-                    padding: 1rem;
-                    background-color: #f5f5f5;
-                    border-radius: 4px;
-                    font-weight: 500;
-                }
-
-                @media (min-width: 768px) {
-                    .time-calculator {
-                        padding: 2rem;
-                    }
-
-                    .input-group {
-                        flex-direction: row;
-                        align-items: center;
-                    }
-
-                    label {
-                        min-width: 100px;
-                    }
-
-                    input, select {
-                        flex: 1;
-                    }
-                }
-            `}</style>
         </div>
     );
 }
