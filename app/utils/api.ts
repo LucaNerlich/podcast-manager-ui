@@ -51,7 +51,7 @@ export const login = async (identifier: string, password: string): Promise<Login
 };
 
 export const getPublicFeeds = async (): Promise<Feed[]> => {
-    const response = await fetch(`${API_URL}/feeds/public`);
+    const response = await fetch(`${API_URL}/feeds/public`, { cache: 'no-store' });
 
     if (!response.ok) {
         throw new Error('Failed to fetch public feeds');
@@ -82,7 +82,7 @@ export const getFeedFromApi = async (slug: string, token?: string): Promise<Feed
         ? `${process.env.NEXT_PUBLIC_DOMAIN}/api/feeds/${slug}?token=${token}`
         : `${process.env.NEXT_PUBLIC_DOMAIN}/api/feeds/${slug}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: 'no-store' });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch feed with slug: ${slug}`);
