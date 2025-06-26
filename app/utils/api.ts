@@ -51,7 +51,9 @@ export const login = async (identifier: string, password: string): Promise<Login
 };
 
 export const getPublicFeeds = async (): Promise<Feed[]> => {
-    const response = await fetch(`${API_URL}/feeds/public`, { cache: 'no-store' });
+    const response = await fetch(`${API_URL}/feeds/public`, {
+        next: { revalidate: 300 } // Cache for 5 minutes (300 seconds)
+    });
 
     if (!response.ok) {
         throw new Error('Failed to fetch public feeds');
@@ -65,7 +67,7 @@ export const getPrivateFeeds = async (token: string): Promise<Feed[]> => {
         headers: {
             Authorization: `Bearer ${token}`,
         },
-        cache: 'no-store'
+        next: { revalidate: 300 } // Cache for 5 minutes (300 seconds)
     });
 
     if (!response.ok) {
@@ -83,7 +85,9 @@ export const getFeedFromApi = async (slug: string, token?: string): Promise<Feed
         ? `${process.env.NEXT_PUBLIC_DOMAIN}/api/feeds/${slug}?token=${token}`
         : `${process.env.NEXT_PUBLIC_DOMAIN}/api/feeds/${slug}`;
 
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, {
+        next: { revalidate: 300 } // Cache for 5 minutes (300 seconds)
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch feed with slug: ${slug}`);
@@ -109,7 +113,9 @@ export const getEpisodeByGuid = async (guid: string, token?: string): Promise<Ep
         ? `${API_URL}/episodes/${guid}?token=${token}`
         : `${API_URL}/episodes/${guid}`;
 
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, {
+        next: { revalidate: 300 } // Cache for 5 minutes (300 seconds)
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch episode with GUID: ${guid}`);
