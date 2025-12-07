@@ -16,10 +16,10 @@ interface FeedItem {
 
 export async function GET(
     request: NextRequest,
-    {params}: { params: { slug: string } }
+    context: { params: Promise<{ slug: string }> }
 ) {
-    // Await the params to fix the Next.js warning
-    const {slug} = await params;
+    // Await the params as required by Next.js (params is a Promise in route handlers)
+    const {slug} = await context.params;
     const {searchParams} = new URL(request.url);
     const token = searchParams.get('token');
     try {
